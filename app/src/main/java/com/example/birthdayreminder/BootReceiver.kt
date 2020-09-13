@@ -17,16 +17,16 @@ class BootReceiver : BroadcastReceiver() {
         alarmIntent.putExtra("title", "title")
         alarmIntent.putExtra("message", "message")
         alarmIntent.putExtra("reason", "notification")
+        alarmIntent.putExtra("timestamp", Calendar.getInstance().timeInMillis)
 
         var pendingAlarm = alarmIntent.let { intent ->
-            intent.putExtra("timestamp", Calendar.getInstance().timeInMillis)
-            PendingIntent.getBroadcast(context, 0, intent, 0)
+            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE)
         }
 
         alarmMgr?.setInexactRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 3000,
-            3000,
+            SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR * 2,
+            AlarmManager.INTERVAL_HOUR * 2,
             pendingAlarm
         )
     }

@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        BirthdayNotificationCreator().onReceive(this, null)
 
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             val title = getContactNameByIndex(this, i) + " hat Geburtstag"
             val message = ""
 
-            setNotification(Calendar.getInstance().timeInMillis + 500, this@MainActivity, title, message)
+            showNotification(this, title, message)
 
             true
         }

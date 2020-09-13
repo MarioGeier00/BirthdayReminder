@@ -19,7 +19,7 @@ fun getContactIdByIndex(context: Context, index: Int): Int? {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun getContactIdByIndex(contactsCursor: Cursor, index: Int): Int? {
-    contactsCursor.move(index + 1);
+    contactsCursor.moveToPosition(index)
     val idColumnIndex = contactsCursor.getColumnIndex("contact_id")
     return contactsCursor.getInt(idColumnIndex)
 }
@@ -37,9 +37,27 @@ fun getContactNameByIndex(context: Context, index: Int): String? {
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun getContactNameByIndex(contactsCursor: Cursor, index: Int): String? {
-    contactsCursor.move(index + 1);
+    contactsCursor.moveToPosition(index)
     val idColumnIndex = contactsCursor.getColumnIndex("display_name")
     return contactsCursor.getString(idColumnIndex)
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getBirthdayByIndex(context: Context, index: Int): String? {
+    val contactsCursor = getContacts(context)
+
+    if (contactsCursor !== null) {
+        return getBirthdayByIndex(contactsCursor, index);
+    }
+    return null
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun getBirthdayByIndex(contactsCursor: Cursor, index: Int): String? {
+    contactsCursor.moveToPosition(index)
+    val birthdayColumnIndex = contactsCursor.getColumnIndex("data1")
+    return contactsCursor.getString(birthdayColumnIndex)
 }
 
 
@@ -63,14 +81,17 @@ fun getContacts(context: Context): Cursor? {
         ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
     )
 
-    // Retrieves the profile from the Contacts Provider
-    val profileCursor = context.contentResolver.query(
-        ContactsContract.Data.CONTENT_URI,
-        projection,
-        where,
-        selectionArgs,
+    return try {
+        // Retrieves the profile from the Contacts Provider
+        context.contentResolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            projection,
+            where,
+            selectionArgs,
+            null
+        )
+    } catch (e: SecurityException) {
         null
-    )
+    }
 
-    return profileCursor
 }
