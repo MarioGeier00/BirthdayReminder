@@ -155,28 +155,9 @@ class MainActivity : AppCompatActivity() {
         if (aColumnIndex === 2) {
             val createDate: String = aCursor.getString(aColumnIndex)
 
-            try {
-                val date = LocalDate.parse(createDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                val newDate = date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-
-                aView.text = newDate
-                return true
-            } catch (ex: Exception) {
-
-                //try {
-                val date2 = LocalDate.parse(
-                    "2020-" + createDate.removeRange(0, 2),
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                )
-                val newDate2 = date2.format(DateTimeFormatter.ofPattern("dd. MMMM"))
-
-                aView.text = newDate2
-                return true
-//                } catch (ex: Exception) {
-//
-//                     return false
-//                }
-            }
+            val friendlyDate = createFriendlyDate(createDate)
+            aView.text = friendlyDate
+            return true
         }
         return false
     }
