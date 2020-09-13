@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             val title = getContactNameByIndex(i) + " hat Geburtstag"
             val message = ""
 
-            setNotification(Calendar.getInstance().timeInMillis + 5000, this@MainActivity, title, message)
+            setNotification(Calendar.getInstance().timeInMillis + 500, this@MainActivity, title, message)
 
             true
         }
