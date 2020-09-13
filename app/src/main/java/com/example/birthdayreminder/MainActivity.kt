@@ -1,6 +1,7 @@
 package com.example.birthdayreminder
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -13,7 +14,6 @@ import android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,10 +33,14 @@ class MainActivity : AppCompatActivity() {
 
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
+
             val contactId = getContactIdByIndex(i)
-            if (contactId != null) {
-                showContactDetail(contactId)
-            }
+
+            val title = getContactNameByIndex(i) + " hat Geburtstag"
+            val message = ""
+
+            setNotification(Calendar.getInstance().timeInMillis + 5000, this@MainActivity, title, message)
+
             true
         }
         contactListView.setOnItemLongClickListener { adapterView, view, i, l ->
@@ -141,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getContactIdByIndex(index: Int): Int? {
-        val contactsCursor = getContacts();
+        val contactsCursor = getContacts()
 
         if (contactsCursor !== null) {
             contactsCursor.move(index + 1);
@@ -149,6 +154,21 @@ class MainActivity : AppCompatActivity() {
             val idColumnIndex = contactsCursor.getColumnIndex("contact_id")
 
             val text = contactsCursor.getInt(idColumnIndex)
+            return text
+        }
+        return null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getContactNameByIndex(index: Int): String? {
+        val contactsCursor = getContacts()
+
+        if (contactsCursor !== null) {
+            contactsCursor.move(index + 1);
+
+            val idColumnIndex = contactsCursor.getColumnIndex("display_name")
+
+            val text = contactsCursor.getString(idColumnIndex)
             return text
         }
         return null
