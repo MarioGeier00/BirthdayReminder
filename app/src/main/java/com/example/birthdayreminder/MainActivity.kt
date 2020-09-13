@@ -1,7 +1,6 @@
 package com.example.birthdayreminder
 
 import android.Manifest
-import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor

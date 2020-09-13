@@ -51,13 +51,10 @@ class NotificationService : IntentService("NotificationService") {
         //Create Channel
         createChannel()
 
-
         var timestamp: Long = 0
         if (intent != null && intent.extras != null) {
             timestamp = intent.extras!!.getLong("timestamp")
         }
-
-
 
 
         if (timestamp > 0) {
@@ -68,9 +65,9 @@ class NotificationService : IntentService("NotificationService") {
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val notifyIntent = Intent(this, MainActivity::class.java)
 
-            var title = "Sample Notification"
+            var title = "Geburtstagsmeldung"
             var message =
-                "You have received a sample notification. This notification will take you to the details page."
+                "Ein unbekannter Geburtstag wurde gemeldet."
 
             if (intent != null) {
                 val extras = intent.extras
@@ -132,7 +129,6 @@ class NotificationService : IntentService("NotificationService") {
                     .setContentText(message).build()
 
             }
-
 
 
             notificationManager =
