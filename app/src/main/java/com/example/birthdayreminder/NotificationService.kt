@@ -32,7 +32,7 @@ class NotificationService : IntentService("NotificationService") {
             notificationChannel.enableVibration(true)
             notificationChannel.setShowBadge(true)
             notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.parseColor("#e8334a")
+            notificationChannel.lightColor = Color.WHITE
             notificationChannel.description = "Display notifications for birthdays"
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(notificationChannel)

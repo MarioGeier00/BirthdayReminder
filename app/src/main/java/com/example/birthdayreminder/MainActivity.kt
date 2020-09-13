@@ -30,12 +30,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
 
-            val contactId = getContactIdByIndex(i)
+            val contactId = getContactIdByIndex(this, i)
 
-            val title = getContactNameByIndex(i) + " hat Geburtstag"
+            val title = getContactNameByIndex(this, i) + " hat Geburtstag"
             val message = ""
 
             setNotification(Calendar.getInstance().timeInMillis + 500, this@MainActivity, title, message)
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         contactListView.setOnItemLongClickListener { adapterView, view, i, l ->
-            val contactId = getContactIdByIndex(i)
+            val contactId = getContactIdByIndex(this, i)
             if (contactId != null) {
                 showEditContact(contactId)
             }
@@ -99,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadContactList() {
 
-        val contactsCursor = getContacts();
+        val contactsCursor = getContacts(this);
 
         val data = arrayOf(R.id.contactName, R.id.birthday)
 
@@ -143,67 +144,7 @@ class MainActivity : AppCompatActivity() {
         this.startActivity(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getContactIdByIndex(index: Int): Int? {
-        val contactsCursor = getContacts()
 
-        if (contactsCursor !== null) {
-            contactsCursor.move(index + 1);
-
-            val idColumnIndex = contactsCursor.getColumnIndex("contact_id")
-
-            val text = contactsCursor.getInt(idColumnIndex)
-            return text
-        }
-        return null
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getContactNameByIndex(index: Int): String? {
-        val contactsCursor = getContacts()
-
-        if (contactsCursor !== null) {
-            contactsCursor.move(index + 1);
-
-            val idColumnIndex = contactsCursor.getColumnIndex("display_name")
-
-            val text = contactsCursor.getString(idColumnIndex)
-            return text
-        }
-        return null
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getContacts(): Cursor? {
-
-        // Sets the columns to retrieve for the user profile
-        val projection = arrayOf(
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Event._ID,
-            ContactsContract.CommonDataKinds.Event.START_DATE,
-            ContactsContract.CommonDataKinds.Event.CONTACT_ID
-        )
-
-        val where =
-            ContactsContract.Data.MIMETYPE + "= ? AND " +
-                    ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                    ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
-
-        val selectionArgs: Array<String> = arrayOf(
-            ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
-        )
-
-        // Retrieves the profile from the Contacts Provider
-        val profileCursor = contentResolver.query(
-            ContactsContract.Data.CONTENT_URI,
-            projection,
-            where,
-            selectionArgs,
-            null
-        )
-
-        return profileCursor
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setViewValue(
