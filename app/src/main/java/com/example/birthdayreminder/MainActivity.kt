@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
+import android.widget.Switch
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -35,14 +36,19 @@ class MainActivity : AppCompatActivity() {
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
 
-            val contactId = getContactIdByIndex(this, i)
+            val testSwitch = findViewById<Switch>(R.id.testSwitch)
+            if (testSwitch.isChecked) {
 
-            val title = getContactNameByIndex(this, i) + " hat Geburtstag"
-            val message = ""
+                val title = getContactNameByIndex(this, i) + " hat Geburtstag"
+                val message = "Testevent durch Click"
 
-            showNotification(this, title, message)
-
-            true
+                showNotification(this, title, message)
+            } else {
+                val contactId = getContactIdByIndex(this, i)
+                if (contactId != null) {
+                    showEditContact(contactId)
+                }
+            }
         }
         contactListView.setOnItemLongClickListener { adapterView, view, i, l ->
             val contactId = getContactIdByIndex(this, i)
@@ -107,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
         if (contactsCursor !== null) {
 
-            var adapter = SimpleCursorAdapter(
+            val adapter = SimpleCursorAdapter(
                 this,
                 R.layout.fragment_contact_list_item,
                 contactsCursor,
@@ -115,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                 data.toIntArray(),
                 FLAG_REGISTER_CONTENT_OBSERVER
             )
-            var listview = findViewById<ListView>(R.id.contactList)
+            val listview = findViewById<ListView>(R.id.contactList)
             listview.adapter = adapter
             adapter.viewBinder = SimpleCursorAdapter.ViewBinder { a: View, b: Cursor, c: Int ->
                 setViewValue(
@@ -144,7 +150,6 @@ class MainActivity : AppCompatActivity() {
         intent.data = uri
         this.startActivity(intent)
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
