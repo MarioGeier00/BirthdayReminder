@@ -43,7 +43,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         @RequiresApi(Build.VERSION_CODES.O)
         fun enqueueSelf(context: Context, restart: Boolean = false) {
             val notificationWork =
-                PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(Duration.ofMinutes(16)).build()
+                PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(Duration.ofHours(3)).build()
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
                     "BirthdayReminderNotifierWorker",
