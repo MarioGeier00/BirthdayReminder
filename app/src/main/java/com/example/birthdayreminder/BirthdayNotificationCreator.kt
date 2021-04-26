@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import java.util.*
 
 
+@Deprecated("Use BirthdayNotificationWorker instead")
 class BirthdayNotificationCreator : BroadcastReceiver() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent?) {
@@ -20,7 +21,7 @@ class BirthdayNotificationCreator : BroadcastReceiver() {
                 var date = getBirthdayByIndex(contacts, i)
 
                 if (date != null) {
-                    var parsedDate = parseDate(date).ParsedDate
+                    var parsedDate = parseDate(date).parsedDate
 
                     var currentMonth = calendar.get(Calendar.MONTH) + 1
                     var currentDay = calendar.get(Calendar.DAY_OF_MONTH)

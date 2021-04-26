@@ -10,6 +10,8 @@ import android.media.RingtoneManager
 import android.os.Build
 import java.util.*
 
+
+@Deprecated("Use BirthdayNotificationWorker instead")
 class NotificationService : IntentService("NotificationService") {
     private lateinit var mNotification: Notification
     private val mNotificationId: Int = 1000

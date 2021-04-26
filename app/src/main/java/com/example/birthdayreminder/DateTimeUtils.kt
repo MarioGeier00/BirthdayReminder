@@ -10,10 +10,10 @@ import java.time.format.FormatStyle
 fun createFriendlyDate(date: String, parsePattern: String = "yyyy-MM-dd", formatStyle: FormatStyle = FormatStyle.LONG): String {
     val parseResult = parseDate(date);
 
-    return if (parseResult.Yearless) {
-        parseResult.ParsedDate.format(DateTimeFormatter.ofPattern("dd. MMMM"))
+    return if (parseResult.yearless) {
+        parseResult.parsedDate.format(DateTimeFormatter.ofPattern("dd. MMMM"))
     } else {
-        parseResult.ParsedDate.format(DateTimeFormatter.ofLocalizedDate(formatStyle))
+        parseResult.parsedDate.format(DateTimeFormatter.ofLocalizedDate(formatStyle))
     }
 }
 
@@ -24,19 +24,12 @@ fun parseDate(date: String, parsePattern: String = "yyyy-MM-dd"): DateParseResul
     return if (date.length == parsePattern.length) {
         DateParseResult(LocalDate.parse(date, DateTimeFormatter.ofPattern(parsePattern)), false)
     } else if (date.length == YEARLESS_DATE_PATTERN.length) {
-        DateParseResult(parseDate("2020-$date").ParsedDate, true)
+        DateParseResult(parseDate("2020-$date").parsedDate, true)
     } else {
-        DateParseResult(parseDate("2020-" + date.removeRange(0, 2)).ParsedDate, true)
+        DateParseResult(parseDate("2020-" + date.removeRange(0, 2)).parsedDate, true)
     }
 }
 
-class DateParseResult {
-    var ParsedDate: LocalDate;
-    var Yearless: Boolean;
-
-
-    constructor(result: LocalDate, yearless: Boolean) {
-        this.ParsedDate = result
-        this.Yearless = yearless
-    }
+class DateParseResult(result: LocalDate, var yearless: Boolean) {
+    var parsedDate: LocalDate = result;
 }

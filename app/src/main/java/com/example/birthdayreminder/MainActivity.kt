@@ -18,10 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +27,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        BirthdayNotificationCreator().onReceive(this, null)
+        // enqueueSelf worker in order to activate the service right after
+        // the user has installed and opened the app
+        BirthdayNotificationWorker.enqueueSelf(applicationContext);
 
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
@@ -39,15 +37,19 @@ class MainActivity : AppCompatActivity() {
             val testSwitch = findViewById<Switch>(R.id.testSwitch)
             if (testSwitch.isChecked) {
 
-                val title = getContactNameByIndex(this, i) + " hat Geburtstag"
-                val message = "Testevent durch Click"
+                BirthdayNotificationWorker.enqueueSelf(applicationContext, true)
 
+                val title = getContactNameByIndex(this, i) + " hat Geburtstag"
+                val message = "Legacy message implementation"
                 showNotification(this, title, message)
+
             } else {
+
                 val contactId = getContactIdByIndex(this, i)
                 if (contactId != null) {
-                    showEditContact(contactId)
+                    showContactDetail(contactId)
                 }
+
             }
         }
         contactListView.setOnItemLongClickListener { adapterView, view, i, l ->
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -121,8 +124,8 @@ class MainActivity : AppCompatActivity() {
                 data.toIntArray(),
                 FLAG_REGISTER_CONTENT_OBSERVER
             )
-            val listview = findViewById<ListView>(R.id.contactList)
-            listview.adapter = adapter
+            val listView = findViewById<ListView>(R.id.contactList)
+            listView.adapter = adapter
             adapter.viewBinder = SimpleCursorAdapter.ViewBinder { a: View, b: Cursor, c: Int ->
                 setViewValue(
                     a as TextView, b, c
@@ -158,7 +161,7 @@ class MainActivity : AppCompatActivity() {
         aCursor: Cursor,
         aColumnIndex: Int
     ): Boolean {
-        if (aColumnIndex === 2) {
+        if (aColumnIndex == 2) {
             val createDate: String = aCursor.getString(aColumnIndex)
 
             val friendlyDate = createFriendlyDate(createDate)
