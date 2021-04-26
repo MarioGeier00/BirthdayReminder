@@ -17,6 +17,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 
 
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
 
-            val testSwitch = findViewById<Switch>(R.id.testSwitch)
+            val testSwitch = findViewById<SwitchCompat>(R.id.testSwitch)
             if (testSwitch.isChecked) {
 
                 BirthdayNotificationWorker.enqueueSelf(applicationContext, true)

@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/testSwitch"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="48px"
-        android:text="@string/test_mode" />
+        android:padding="48dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/test_mode"
+        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/contactList"
@@ -21,4 +22,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/testSwitch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
