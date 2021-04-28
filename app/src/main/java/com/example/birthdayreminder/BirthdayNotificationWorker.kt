@@ -19,14 +19,13 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     workerParams
 ) {
 
-    var isInitialized = false;
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
         if (!isInitialized) {
             showNotification("BirthdayReminderNotifierWorker started")
             isInitialized = true
         }
+
         notifyAboutBirthdays(applicationContext)
 
         // Indicate whether the work finished successfully with the Result
@@ -40,10 +39,13 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     }
 
     companion object {
+        var isInitialized = false;
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun enqueueSelf(context: Context, restart: Boolean = false) {
             val notificationWork =
                 PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(Duration.ofHours(3)).build()
+
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
                     "BirthdayReminderNotifierWorker",
