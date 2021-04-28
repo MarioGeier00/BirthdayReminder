@@ -43,6 +43,14 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun enqueueSelf(context: Context, restart: Boolean = false) {
+            if (!isActivated(context)) {
+                return
+            }
+
+            if (restart) {
+                isInitialized = false
+            }
+
             val notificationWork =
                 PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(Duration.ofHours(3)).build()
 
@@ -52,6 +60,34 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                     if (restart) ExistingPeriodicWorkPolicy.REPLACE else ExistingPeriodicWorkPolicy.KEEP,
                     notificationWork
                 )
+        }
+
+        fun dequeueSelf(context: Context) {
+            if (isActivated(context)) {
+                return
+            }
+
+            WorkManager.getInstance(context).cancelUniqueWork("BirthdayReminderNotifierWorker");
+        }
+
+        fun isActivated(context: Context): Boolean {
+            val sharedPref = context.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
+            return sharedPref.getBoolean("active", false);
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun updateState(context: Context, state: Boolean) {
+            val sharedPref = context.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
+            with (sharedPref.edit()) {
+                putBoolean("active", state)
+                apply()
+            }
+
+            if (state) {
+                enqueueSelf(context, true)
+            } else {
+                dequeueSelf(context);
+            }
         }
     }
 

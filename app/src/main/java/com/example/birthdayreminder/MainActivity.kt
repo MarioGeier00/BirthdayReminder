@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
 import android.widget.ListView
 import android.widget.SimpleCursorAdapter
-import android.widget.Switch
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -32,25 +31,17 @@ class MainActivity : AppCompatActivity() {
         // the user has installed and opened the app
         BirthdayNotificationWorker.enqueueSelf(applicationContext);
 
+        val testSwitch = findViewById<SwitchCompat>(R.id.testSwitch)
+        testSwitch.isChecked = BirthdayNotificationWorker.isActivated(applicationContext);
+        testSwitch.setOnCheckedChangeListener { compoundButton, b ->
+            BirthdayNotificationWorker.updateState(applicationContext, testSwitch.isChecked);
+        }
+
         val contactListView = findViewById<ListView>(R.id.contactList)
         contactListView.setOnItemClickListener { adapterView, view, i, l ->
-
-            val testSwitch = findViewById<SwitchCompat>(R.id.testSwitch)
-            if (testSwitch.isChecked) {
-
-                BirthdayNotificationWorker.enqueueSelf(applicationContext, true)
-
-                val title = getContactNameByIndex(this, i) + " hat Geburtstag"
-                val message = "Legacy message implementation"
-                showNotification(this, title, message)
-
-            } else {
-
-                val contactId = getContactIdByIndex(this, i)
-                if (contactId != null) {
-                    showContactDetail(contactId)
-                }
-
+            val contactId = getContactIdByIndex(this, i)
+            if (contactId != null) {
+                showContactDetail(contactId)
             }
         }
         contactListView.setOnItemLongClickListener { adapterView, view, i, l ->
