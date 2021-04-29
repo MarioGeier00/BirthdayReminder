@@ -39,6 +39,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     }
 
     companion object {
+        @JvmStatic
         var isInitialized = false;
 
         @RequiresApi(Build.VERSION_CODES.O)
