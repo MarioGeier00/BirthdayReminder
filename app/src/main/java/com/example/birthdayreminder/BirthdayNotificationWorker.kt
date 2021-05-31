@@ -21,9 +21,14 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        if (!isInitialized) {
+        val sharedPref = applicationContext.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
+
+        if (!sharedPref.getBoolean("notified", false)) {
             showNotification("BirthdayReminderNotifierWorker started")
-            isInitialized = true
+            with (sharedPref.edit()) {
+                putBoolean("notified", true)
+                apply()
+            }
         }
 
         notifyAboutBirthdays(applicationContext)
@@ -39,17 +44,10 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     }
 
     companion object {
-        @JvmStatic
-        var isInitialized = false;
-
         @RequiresApi(Build.VERSION_CODES.O)
         fun enqueueSelf(context: Context, restart: Boolean = false) {
             if (!isActivated(context)) {
                 return
-            }
-
-            if (restart) {
-                isInitialized = false
             }
 
             val notificationWork =
@@ -81,6 +79,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             val sharedPref = context.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
             with (sharedPref.edit()) {
                 putBoolean("active", state)
+                putBoolean("notified", false)
                 apply()
             }
 
