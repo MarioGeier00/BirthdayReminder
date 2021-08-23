@@ -2,4 +2,7 @@
     <string name="app_name" translatable="false">BirthdayReminder</string>
     <string name="notifications">BirthdayReminder notifications</string>
     <string name="notifications_description">BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
