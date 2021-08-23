@@ -24,14 +24,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".AlarmReceiver"
-            android:enabled="true" />
-
-        <service
-            android:name=".NotificationService"
-            android:enabled="true" />
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
