@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notifications">BirthdayReminder Benachrichtigungen</string>
+    <string name="notifications_description">BirthdayReminder informiert dich über die Geburtstage deiner Kontakte</string>
+</resources>

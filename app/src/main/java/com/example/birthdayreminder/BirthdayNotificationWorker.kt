@@ -116,9 +116,8 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "BirthdayReminder"
-            val descriptionText =
-                "BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth"
+            val name = applicationContext.resources.getString(R.string.notifications);
+            val descriptionText = applicationContext.resources.getString(R.string.notifications_description);
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
