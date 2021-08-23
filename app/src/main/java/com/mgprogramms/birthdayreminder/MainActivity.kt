@@ -19,8 +19,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // enqueueSelf worker in order to activate the service right after
+        // the user has installed and opened the app
+        BirthdayNotificationWorker.enqueueSelf(applicationContext);
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

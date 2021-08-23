@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="com.example.birthdayreminder.BootReceiver"
+            android:name="com.mgprogramms.birthdayreminder.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

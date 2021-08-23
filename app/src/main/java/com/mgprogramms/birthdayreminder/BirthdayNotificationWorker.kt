@@ -101,6 +101,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         createNotificationChannel();
 
         val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(R.id.icon)
             .setContentTitle(text)
             .setContentText("BirthdayReminder")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
