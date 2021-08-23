@@ -2,4 +2,8 @@
 <resources>
     <string name="notifications">BirthdayReminder Benachrichtigungen</string>
     <string name="notifications_description">BirthdayReminder informiert dich über die Geburtstage deiner Kontakte</string>
+    <string name="birthday_not_found">Keinen Geburtstag gefunden</string>
+    <string name="days">Tage</string>
+    <string name="day">Tag</string>
+    <string name="until_birthday_of">"bis Geburtstag von "</string>
 </resources>
