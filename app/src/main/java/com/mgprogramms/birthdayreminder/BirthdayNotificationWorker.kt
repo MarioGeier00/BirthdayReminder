@@ -53,7 +53,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        fun enqueueSelf(context: Context, notifyHasStarted: Boolean = true, restart: Boolean = false) {
+        fun enqueueSelf(
+            context: Context,
+            notifyHasStarted: Boolean = true,
+            restart: Boolean = false
+        ) {
             if (!isActivated(context)) {
                 return
             }
@@ -70,6 +74,9 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             var delayDuration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
             if (delayDuration.isNegative) {
                 delayDuration = delayDuration.plusDays(1)
+
+                WorkManager.getInstance(context)
+                    .enqueue(OneTimeWorkRequestBuilder<BirthdayNotificationWorker>().build())
             }
 
             val notificationWork =
