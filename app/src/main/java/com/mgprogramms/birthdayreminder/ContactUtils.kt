@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.os.Build
 import android.provider.ContactsContract
 import androidx.annotation.RequiresApi
+import android.provider.ContactsContract.CommonDataKinds.Phone
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -69,7 +70,7 @@ fun getContacts(context: Context): Cursor? {
         ContactsContract.Contacts.DISPLAY_NAME,
         ContactsContract.CommonDataKinds.Event._ID,
         ContactsContract.CommonDataKinds.Event.START_DATE,
-        ContactsContract.CommonDataKinds.Event.CONTACT_ID
+        ContactsContract.CommonDataKinds.Event.CONTACT_ID,
     )
 
     val where =
@@ -94,4 +95,41 @@ fun getContacts(context: Context): Cursor? {
         null
     }
 
+}
+
+fun getPhoneNumberByContactId(context: Context, contactId: Int): String? {
+    val whatsAppContacts = context.contentResolver.query(
+        ContactsContract.RawContacts.CONTENT_URI,
+        arrayOf(ContactsContract.RawContacts._ID),
+        ContactsContract.RawContacts.ACCOUNT_TYPE + " = ? AND " + ContactsContract.RawContacts.CONTACT_ID + " = ?",
+        arrayOf("com.whatsapp", contactId.toString()),
+        null
+    )
+
+    if (whatsAppContacts != null && whatsAppContacts.moveToFirst()) {
+
+        val rawContactIdColumn = whatsAppContacts.getColumnIndex(ContactsContract.RawContacts._ID)
+        if (rawContactIdColumn >= 0) {
+            val rawContactId = whatsAppContacts.getInt(rawContactIdColumn)
+
+            val whatsAppNumber = context.contentResolver.query(
+                Phone.CONTENT_URI,
+                arrayOf(Phone.NUMBER),
+                Phone.CONTACT_ID + " = ? AND " + Phone.RAW_CONTACT_ID  + " = ?",
+                arrayOf(contactId.toString(), rawContactId.toString()), null
+            )
+
+            if (whatsAppNumber != null && whatsAppNumber.moveToFirst()) {
+                val numberColumn = whatsAppNumber.getColumnIndex(Phone.NUMBER)
+                if (numberColumn >= 0) {
+                    val number = whatsAppNumber.getString(numberColumn)
+                    whatsAppNumber.close()
+                    return number
+                }
+            }
+        }
+        whatsAppContacts.close()
+    }
+
+    return null
 }

@@ -104,14 +104,14 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     val CHANNEL_ID = "BirthdayReminderNotifier"
 
-    val NOTIFICATION_ID_DEFAULT = 0;
-    val NOTIFICATION_ID_BIRTHDAY = 1;
+    val NOTIFICATION_ID_DEFAULT = -2;
+    val NOTIFICATION_ID_BIRTHDAY = -1;
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotification(text: String, notificationId: Int = NOTIFICATION_ID_DEFAULT) {
         createNotificationChannel();
 
-        val builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        var builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.id.icon)
             .setContentTitle(text)
             .setContentText("BirthdayReminder")
@@ -128,16 +128,22 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                     PendingIntent.FLAG_IMMUTABLE
                 )
             )
-            .addAction(
-                R.id.icon, "Send message",
-                PendingIntent.getActivity(
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val whatsAppNumber = getPhoneNumberByContactId(applicationContext, notificationId)
+        if (whatsAppNumber != null) {
+            builder = builder.addAction(
+                R.id.icon, "Send message to $whatsAppNumber",
+                PendingIntent.getBroadcast(
                     applicationContext,
                     notificationId,
-                    Intent(applicationContext, MainActivity::class.java),
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    Intent(applicationContext, OpenChatReceiver::class.java).apply {
+                        putExtra(CONTACT_ID, notificationId)
+                    },
+                    PendingIntent.FLAG_IMMUTABLE
                 )
             )
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        }
 
         with(NotificationManagerCompat.from(applicationContext)) {
             // notificationId is a unique int for each notification that you must define
