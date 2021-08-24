@@ -10,7 +10,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
+import java.sql.Time
 import java.time.Duration
+import java.time.Instant
+import java.time.LocalTime
 import java.util.*
 
 class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
@@ -55,8 +58,16 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 return
             }
 
+            var delayDuration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
+            if (delayDuration.isNegative) {
+                delayDuration = delayDuration.plusDays(1)
+            }
+
             val notificationWork =
-                PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(Duration.ofHours(3)).build()
+                PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(
+                    Duration.ofDays(1),
+                    Duration.ofMillis(PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS)
+                ).setInitialDelay(delayDuration).build()
 
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
