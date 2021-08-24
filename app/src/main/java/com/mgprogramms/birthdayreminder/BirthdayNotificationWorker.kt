@@ -53,9 +53,18 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        fun enqueueSelf(context: Context, restart: Boolean = false) {
+        fun enqueueSelf(context: Context, notifyHasStarted: Boolean = true, restart: Boolean = false) {
             if (!isActivated(context)) {
                 return
+            }
+
+            val sharedPref = context.getSharedPreferences(
+                "BirthdayReminderNotifierWorker",
+                Context.MODE_PRIVATE
+            )
+            with(sharedPref.edit()) {
+                putBoolean("notified", !notifyHasStarted)
+                apply()
             }
 
             var delayDuration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
@@ -101,12 +110,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             );
             with(sharedPref.edit()) {
                 putBoolean("active", state)
-                putBoolean("notified", false)
                 apply()
             }
 
             if (state) {
-                enqueueSelf(context, true)
+                enqueueSelf(context, notifyHasStarted = false, restart = true)
             } else {
                 dequeueSelf(context);
             }

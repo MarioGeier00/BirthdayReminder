@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         // enqueueSelf worker in order to activate the service right after
         // the user has installed and opened the app
-        BirthdayNotificationWorker.enqueueSelf(applicationContext);
+        BirthdayNotificationWorker.enqueueSelf(applicationContext, false);
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
