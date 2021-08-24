@@ -32,17 +32,13 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        // only load the notification state once in the beginning to
+        // make sure the setOnCheckedChangeListener is not called
+        binding.notificationSwitch.isChecked = notificationsViewModel.notifications.value == true
 
-        binding.notificationSwitch.setOnCheckedChangeListener { compoundButton, b ->
-            BirthdayNotificationWorker.updateState(
-                requireContext(),
-                binding.notificationSwitch.isChecked
-            )
+        binding.notificationSwitch.setOnCheckedChangeListener { _, _ ->
+            notificationsViewModel.updateNotificationState(binding.notificationSwitch.isChecked)
         }
-
-        notificationsViewModel.notifications.observe(viewLifecycleOwner, {
-            binding.notificationSwitch.isChecked = it
-        })
         return root
     }
 
