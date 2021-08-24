@@ -2,7 +2,9 @@ package com.mgprogramms.birthdayreminder
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -21,11 +23,14 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        val sharedPref = applicationContext.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
+        val sharedPref = applicationContext.getSharedPreferences(
+            "BirthdayReminderNotifierWorker",
+            Context.MODE_PRIVATE
+        );
 
         if (!sharedPref.getBoolean("notified", false)) {
             showNotification("BirthdayReminderNotifierWorker started")
-            with (sharedPref.edit()) {
+            with(sharedPref.edit()) {
                 putBoolean("notified", true)
                 apply()
             }
@@ -70,14 +75,20 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         }
 
         fun isActivated(context: Context): Boolean {
-            val sharedPref = context.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
+            val sharedPref = context.getSharedPreferences(
+                "BirthdayReminderNotifierWorker",
+                Context.MODE_PRIVATE
+            );
             return sharedPref.getBoolean("active", false);
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun updateState(context: Context, state: Boolean) {
-            val sharedPref = context.getSharedPreferences("BirthdayReminderNotifierWorker", Context.MODE_PRIVATE);
-            with (sharedPref.edit()) {
+            val sharedPref = context.getSharedPreferences(
+                "BirthdayReminderNotifierWorker",
+                Context.MODE_PRIVATE
+            );
+            with(sharedPref.edit()) {
                 putBoolean("active", state)
                 putBoolean("notified", false)
                 apply()
@@ -104,6 +115,28 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             .setSmallIcon(R.id.icon)
             .setContentTitle(text)
             .setContentText("BirthdayReminder")
+            .setOngoing(true)
+            .addAction(
+                R.id.icon,
+                "Done",
+                PendingIntent.getBroadcast(
+                    applicationContext,
+                    notificationId,
+                    Intent(applicationContext, RemoveNotificationReceiver::class.java).apply {
+                        putExtra(NOTIFICATION_ID, notificationId)
+                    },
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            )
+            .addAction(
+                R.id.icon, "Send message",
+                PendingIntent.getActivity(
+                    applicationContext,
+                    notificationId,
+                    Intent(applicationContext, MainActivity::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(applicationContext)) {
@@ -117,7 +150,8 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = applicationContext.resources.getString(R.string.notifications)
-            val descriptionText = applicationContext.resources.getString(R.string.notifications_description)
+            val descriptionText =
+                applicationContext.resources.getString(R.string.notifications_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
@@ -152,7 +186,10 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                         val contactName = getContactNameByIndex(contacts, i)
                         val contactId = getContactIdByIndex(contacts, i);
                         val title = "$contactName hat Geburtstag"
-                        showNotification(title, if (contactId !== null) contactId else NOTIFICATION_ID_BIRTHDAY)
+                        showNotification(
+                            title,
+                            if (contactId !== null) contactId else NOTIFICATION_ID_BIRTHDAY
+                        )
                     }
                 }
             }
