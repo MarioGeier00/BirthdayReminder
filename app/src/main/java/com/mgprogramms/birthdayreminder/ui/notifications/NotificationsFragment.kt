@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.mgprogramms.birthdayreminder.BirthdayNotificationWorker
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
