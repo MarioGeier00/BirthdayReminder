@@ -40,6 +40,18 @@
             android:layout_height="wrap_content"
             android:text="@string/removable_notifications"
             android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/service_app_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/service_app_start"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
     <Button

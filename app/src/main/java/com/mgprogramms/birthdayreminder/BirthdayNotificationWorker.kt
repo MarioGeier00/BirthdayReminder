@@ -53,6 +53,8 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     }
 
     companion object {
+        const val WORKER_ID = "BirthdayNotificationWorker"
+
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getDurationUntilNextNotification(onlyDurationInFuture: Boolean = true): Duration {
@@ -74,7 +76,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             }
 
             val sharedPref = context.getSharedPreferences(
-                "BirthdayReminderNotifierWorker",
+                WORKER_ID,
                 Context.MODE_PRIVATE
             )
             with(sharedPref.edit()) {
@@ -98,7 +100,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
             WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(
-                    "BirthdayReminderNotifierWorker",
+                    WORKER_ID,
                     if (restart) ExistingPeriodicWorkPolicy.REPLACE else ExistingPeriodicWorkPolicy.KEEP,
                     notificationWork
                 )
@@ -109,12 +111,12 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 return
             }
 
-            WorkManager.getInstance(context).cancelUniqueWork("BirthdayReminderNotifierWorker")
+            WorkManager.getInstance(context).cancelUniqueWork(WORKER_ID)
         }
 
         fun isActivated(context: Context): Boolean {
             val sharedPref = context.getSharedPreferences(
-                "BirthdayReminderNotifierWorker",
+                WORKER_ID,
                 Context.MODE_PRIVATE
             )
             return sharedPref.getBoolean("active", false)
@@ -123,7 +125,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         @RequiresApi(Build.VERSION_CODES.O)
         fun updateState(context: Context, state: Boolean) {
             val sharedPref = context.getSharedPreferences(
-                "BirthdayReminderNotifierWorker",
+                WORKER_ID,
                 Context.MODE_PRIVATE
             )
             with(sharedPref.edit()) {
@@ -137,6 +139,23 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 dequeueSelf(context)
             }
         }
+
+        fun enqueueAtAppStartup(context: Context): Boolean {
+            val sharedPref = context.getSharedPreferences(
+                WORKER_ID,
+                Context.MODE_PRIVATE
+            )
+            return sharedPref.getBoolean("enqueueAtAppStartup", false)
+        }
+
+        fun setEnqueueAtAppStartup(context: Context, value: Boolean) {
+            with(context.getSharedPreferences(WORKER_ID, Context.MODE_PRIVATE).edit()) {
+                putBoolean("enqueueAtAppStartup", value)
+                apply()
+            }
+        }
+
+
     }
 
     val CHANNEL_ID = "BirthdayReminderNotifier"

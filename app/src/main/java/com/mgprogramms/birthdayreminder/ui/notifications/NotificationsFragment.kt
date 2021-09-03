@@ -59,6 +59,13 @@ class NotificationsFragment : Fragment() {
         }
 
 
+        binding.serviceAppStart.isChecked = BirthdayNotificationWorker.enqueueAtAppStartup(requireContext())
+
+        binding.serviceAppStart.setOnCheckedChangeListener { _, _ ->
+            BirthdayNotificationWorker.setEnqueueAtAppStartup(requireContext(), binding.serviceAppStart.isChecked)
+        }
+
+
         binding.openNotificationHistory.setOnClickListener {
             requireContext().startActivity(Intent(context, NotificationHistory::class.java))
         }
