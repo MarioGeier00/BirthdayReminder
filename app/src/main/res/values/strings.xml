@@ -8,6 +8,7 @@
     <string name="birthday_not_found">No birthday found</string>
     <string name="days">days</string>
     <string name="day">day</string>
-    <string name="until_birthday_of">"until birthday of "</string>
+    <string name="until_birthday_of">until birthday of %s</string>
     <string name="removable_notifications">Removable notifications</string>
+    <string name="next_notification">Scheduled notification in %1$s minutes</string>
 </resources>

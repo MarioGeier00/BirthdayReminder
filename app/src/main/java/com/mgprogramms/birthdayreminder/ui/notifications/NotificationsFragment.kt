@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.mgprogramms.birthdayreminder.BirthdayNotificationWorker
+import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
@@ -30,6 +32,13 @@ class NotificationsFragment : Fragment() {
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val durationUntilNextNotification = BirthdayNotificationWorker.getDurationUntilNextNotification()
+        binding.nextNotification.text = String.format(
+            resources.getString(R.string.next_notification),
+            durationUntilNextNotification.toHours(),
+            durationUntilNextNotification.toMinutes() % (durationUntilNextNotification.toHours() * 60)
+        )
 
         // only load the notification state once in the beginning to
         // make sure the setOnCheckedChangeListener is not called

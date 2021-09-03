@@ -7,30 +7,39 @@
     tools:context=".ui.notifications.NotificationsFragment">
 
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="16dp">
 
         <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/notification_switch"
-                android:text="@string/notifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="20sp"
-                android:layout_marginLeft="24dp" android:layout_marginRight="16dp"/>
+            android:id="@+id/notification_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/next_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/next_notification" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
         <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/removable_notifications"
-                android:text="@string/removable_notifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="20sp"
-                android:layout_marginRight="16dp" android:layout_marginLeft="24dp"/>
+            android:id="@+id/removable_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/removable_notifications"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

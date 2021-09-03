@@ -27,7 +27,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         val sharedPref = applicationContext.getSharedPreferences(
             "BirthdayReminderNotifierWorker",
             Context.MODE_PRIVATE
-        );
+        )
 
         if (!sharedPref.getBoolean("notified", false)) {
             showNotification("BirthdayReminderNotifierWorker started")
@@ -50,6 +50,16 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
     }
 
     companion object {
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun getDurationUntilNextNotification(onlyDurationInFuture: Boolean = true): Duration {
+            var duration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
+            if (duration.isNegative && onlyDurationInFuture) {
+                duration = duration.plusDays(1)
+            }
+            return duration
+        }
+
         @RequiresApi(Build.VERSION_CODES.O)
         fun enqueueSelf(
             context: Context,
@@ -69,7 +79,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 apply()
             }
 
-            var delayDuration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
+            var delayDuration = getDurationUntilNextNotification(false)
             if (delayDuration.isNegative) {
                 delayDuration = delayDuration.plusDays(1)
 
@@ -96,15 +106,15 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 return
             }
 
-            WorkManager.getInstance(context).cancelUniqueWork("BirthdayReminderNotifierWorker");
+            WorkManager.getInstance(context).cancelUniqueWork("BirthdayReminderNotifierWorker")
         }
 
         fun isActivated(context: Context): Boolean {
             val sharedPref = context.getSharedPreferences(
                 "BirthdayReminderNotifierWorker",
                 Context.MODE_PRIVATE
-            );
-            return sharedPref.getBoolean("active", false);
+            )
+            return sharedPref.getBoolean("active", false)
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -128,12 +138,12 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     val CHANNEL_ID = "BirthdayReminderNotifier"
 
-    val NOTIFICATION_ID_DEFAULT = -2;
-    val NOTIFICATION_ID_BIRTHDAY = -1;
+    val NOTIFICATION_ID_DEFAULT = -2
+    val NOTIFICATION_ID_BIRTHDAY = -1
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotification(text: String, notificationId: Int = NOTIFICATION_ID_DEFAULT) {
-        createNotificationChannel();
+        createNotificationChannel()
 
         var builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.id.icon)
@@ -232,7 +242,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             }
 
             if (birthdayNames.isNotEmpty()) {
-                PersistentNotificationService.setNotifications(context, birthdayNames.toTypedArray(), contactIds.toIntArray())
+                PersistentNotificationService.setNotifications(
+                    context,
+                    birthdayNames.toTypedArray(),
+                    contactIds.toIntArray()
+                )
             }
         }
     }

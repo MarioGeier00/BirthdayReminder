@@ -36,7 +36,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.nameOfNextBirthday.observe(viewLifecycleOwner, {
             binding.textBirthdayName.text =
-                requireContext().resources.getString(R.string.until_birthday_of) + it
+                String.format(requireContext().resources.getString(R.string.until_birthday_of), it)
         })
         homeViewModel.daysUntilNextBirthday.observe(viewLifecycleOwner, {
             binding.textDaysUntilBirthday.text = it.toString()
