@@ -58,7 +58,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun getDurationUntilNextNotification(onlyDurationInFuture: Boolean = true): Duration {
-            var duration = Duration.between(LocalTime.now(), LocalTime.of(9, 30))
+            var duration = Duration.between(LocalTime.now(), LocalTime.of(1, 10))
             if (duration.isNegative && onlyDurationInFuture) {
                 duration = duration.plusDays(1)
             }
@@ -94,8 +94,8 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
             val notificationWork =
                 PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(
-                    Duration.ofDays(1),
-                    Duration.ofMillis(PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS)
+                    Duration.ofHours(6),
+                    Duration.ofHours(1)
                 ).setInitialDelay(delayDuration).build()
 
             WorkManager.getInstance(context)
@@ -155,13 +155,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             }
         }
 
-
     }
 
     val CHANNEL_ID = "BirthdayReminderNotifier"
 
     val NOTIFICATION_ID_DEFAULT = -2
-    val NOTIFICATION_ID_BIRTHDAY = -1
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showNotification(text: String, notificationId: Int = NOTIFICATION_ID_DEFAULT) {
@@ -185,7 +183,6 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setChannelId(CHANNEL_ID)
 
         val whatsAppNumber = getPhoneNumberByContactId(applicationContext, notificationId)
         if (whatsAppNumber != null) {
@@ -233,9 +230,6 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         if (contacts != null) {
             val calendar = Calendar.getInstance()
 
-            val birthdayNames = emptyList<String>().toMutableList()
-            val contactIds = emptyList<Int>().toMutableList()
-
             for (i in 0 until contacts.count) {
 
                 val date = getBirthdayByIndex(contacts, i)
@@ -253,22 +247,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                         val contactId = getContactIdByIndex(contacts, i)
                         val title = "$contactName hat Geburtstag"
 
-                        if (contactId == null) {
-                            contactIds.add(1)
-                        } else {
-                            contactIds.add(contactId)
+                        if (contactName != null && contactId != null) {
+                            showNotification(title, contactId)
                         }
-                        birthdayNames.add(title)
                     }
                 }
-            }
-
-            if (birthdayNames.isNotEmpty()) {
-                PersistentNotificationService.setNotifications(
-                    context,
-                    birthdayNames.toTypedArray(),
-                    contactIds.toIntArray()
-                )
             }
         }
     }

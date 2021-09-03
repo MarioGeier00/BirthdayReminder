@@ -17,8 +17,6 @@ class BootReceiver : BroadcastReceiver() {
             intent.action === Intent.ACTION_REBOOT
         ) {
             NotificationLogger.addNotification(context, "BootReceiver ${intent.action}")
-
-            BirthdayNotificationWorker.enqueueSelf(context, notifyHasStarted = true, restart = true)
         }
 
     }
