@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Build
 import android.provider.ContactsContract
-import androidx.annotation.RequiresApi
 import android.provider.ContactsContract.CommonDataKinds.Phone
+import androidx.annotation.RequiresApi
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -13,13 +13,13 @@ fun getContactIdByIndex(context: Context, index: Int): Int? {
     val contactsCursor = getContacts(context)
 
     if (contactsCursor !== null) {
-        return getContactIdByIndex(contactsCursor, index);
+        return getContactIdByIndex(contactsCursor, index)
     }
     return null
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun getContactIdByIndex(contactsCursor: Cursor, index: Int): Int? {
+fun getContactIdByIndex(contactsCursor: Cursor, index: Int): Int {
     contactsCursor.moveToPosition(index)
     val idColumnIndex = contactsCursor.getColumnIndex("contact_id")
     return contactsCursor.getInt(idColumnIndex)
@@ -31,7 +31,7 @@ fun getContactNameByIndex(context: Context, index: Int): String? {
     val contactsCursor = getContacts(context)
 
     if (contactsCursor !== null) {
-        return getContactNameByIndex(contactsCursor, index);
+        return getContactNameByIndex(contactsCursor, index)
     }
     return null
 }
@@ -49,7 +49,7 @@ fun getBirthdayByIndex(context: Context, index: Int): String? {
     val contactsCursor = getContacts(context)
 
     if (contactsCursor !== null) {
-        return getBirthdayByIndex(contactsCursor, index);
+        return getBirthdayByIndex(contactsCursor, index)
     }
     return null
 }
@@ -67,7 +67,7 @@ fun getContacts(context: Context): Cursor? {
 
     // Sets the columns to retrieve for the user profile
     val projection = arrayOf(
-        ContactsContract.Contacts.DISPLAY_NAME,
+        ContactsContract.Data.DISPLAY_NAME,
         ContactsContract.CommonDataKinds.Event._ID,
         ContactsContract.CommonDataKinds.Event.START_DATE,
         ContactsContract.CommonDataKinds.Event.CONTACT_ID,
@@ -76,7 +76,7 @@ fun getContacts(context: Context): Cursor? {
     val where =
         ContactsContract.Data.MIMETYPE + "= ? AND " +
                 ContactsContract.CommonDataKinds.Event.TYPE + "=" +
-                ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY;
+                ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
 
     val selectionArgs: Array<String> = arrayOf(
         ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
@@ -89,7 +89,7 @@ fun getContacts(context: Context): Cursor? {
             projection,
             where,
             selectionArgs,
-            null
+            ContactsContract.CommonDataKinds.Event.START_DATE + " ASC"
         )
     } catch (e: SecurityException) {
         null
@@ -115,7 +115,7 @@ fun getPhoneNumberByContactId(context: Context, contactId: Int): String? {
             val whatsAppNumber = context.contentResolver.query(
                 Phone.CONTENT_URI,
                 arrayOf(Phone.NUMBER),
-                Phone.CONTACT_ID + " = ? AND " + Phone.RAW_CONTACT_ID  + " = ?",
+                Phone.CONTACT_ID + " = ? AND " + Phone.RAW_CONTACT_ID + " = ?",
                 arrayOf(contactId.toString(), rawContactId.toString()), null
             )
 

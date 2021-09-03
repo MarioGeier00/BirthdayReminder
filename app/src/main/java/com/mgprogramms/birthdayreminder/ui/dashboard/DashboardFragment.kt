@@ -72,7 +72,9 @@ class DashboardFragment : Fragment() {
 
         val contactsCursor = getContacts(requireContext());
 
-        val data = arrayOf(R.id.contact_name, R.id.birthday)
+        val projectionFrom =
+            arrayOf(ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Event.START_DATE)
+        val projectionTo = arrayOf(R.id.contact_name, R.id.birthday)
 
         if (contactsCursor !== null) {
 
@@ -80,10 +82,11 @@ class DashboardFragment : Fragment() {
                 requireContext(),
                 R.layout.fragment_contact_list_item,
                 contactsCursor,
-                arrayOf("display_name", "data1"),
-                data.toIntArray(),
+                projectionFrom,
+                projectionTo.toIntArray(),
                 CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
             )
+
             binding.contactList.adapter = adapter
             adapter.viewBinder = SimpleCursorAdapter.ViewBinder { a: View, b: Cursor, c: Int ->
                 setViewValue(
