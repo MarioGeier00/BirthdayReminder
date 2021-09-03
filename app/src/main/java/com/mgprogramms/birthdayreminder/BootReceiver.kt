@@ -16,8 +16,8 @@ class BootReceiver : BroadcastReceiver() {
             intent.action === Intent.ACTION_LOCKED_BOOT_COMPLETED ||
             intent.action === Intent.ACTION_REBOOT
         ) {
-            val i = Intent(context, PersistentNotificationService::class.java)
-            context.startService(i)
+            NotificationLogger.addNotification(context, "BootReceiver ${intent.action}")
+
             BirthdayNotificationWorker.enqueueSelf(context, notifyHasStarted = true, restart = true)
         }
 

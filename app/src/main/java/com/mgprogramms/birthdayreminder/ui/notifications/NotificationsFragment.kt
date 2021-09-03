@@ -1,5 +1,6 @@
 package com.mgprogramms.birthdayreminder.ui.notifications
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.mgprogramms.birthdayreminder.BirthdayNotificationWorker
 import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
+import com.mgprogramms.birthdayreminder.ui.history.NotificationHistory
+
 
 class NotificationsFragment : Fragment() {
 
@@ -53,6 +56,11 @@ class NotificationsFragment : Fragment() {
 
         binding.removableNotifications.setOnCheckedChangeListener { _, _ ->
             notificationsViewModel.updateRemoveNotifications(binding.removableNotifications.isChecked)
+        }
+
+
+        binding.openNotificationHistory.setOnClickListener {
+            requireContext().startActivity(Intent(context, NotificationHistory::class.java))
         }
         return root
     }

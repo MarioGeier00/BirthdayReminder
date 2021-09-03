@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         // the user has installed and opened the app
         BirthdayNotificationWorker.enqueueSelf(applicationContext, false);
 
-        val i = Intent(applicationContext, PersistentNotificationService::class.java)
-        applicationContext.startService(i)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

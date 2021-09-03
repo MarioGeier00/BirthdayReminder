@@ -20,6 +20,11 @@ class PersistentNotificationService : Service() {
         const val IDS = "ids"
 
         fun setNotifications(context: Context, notificationTexts: Array<String>, notificationIds: IntArray) {
+            NotificationLogger.addNotification(
+                context,
+                "PersistentNotificationService setNotifications [${notificationTexts.joinToString()}]"
+            )
+
             val intent = Intent(context, PersistentNotificationService::class.java).apply {
                 putExtra(MESSAGES, notificationTexts)
                 putExtra(IDS, notificationIds)
@@ -47,6 +52,10 @@ class PersistentNotificationService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
+        NotificationLogger.addNotification(applicationContext, "PersistentNotificationService onStartCommand")
+
+        var stopReason = "bundle"
+
         val bundle = intent.extras
         if (bundle != null) {
             val messages = bundle.getStringArray(MESSAGES)
@@ -55,17 +64,42 @@ class PersistentNotificationService : Service() {
                 var hasDisplayedMessages = false
                 for (i in messages.indices) {
                     var notificationId = ids[i]
-                    if (!RemoveNotificationReceiver.isActivated(applicationContext) || !RemoveNotificationReceiver.hasBeenRemovedToday(applicationContext, notificationId)) {
+                    if (!RemoveNotificationReceiver.isActivated(applicationContext) || !RemoveNotificationReceiver.hasBeenRemovedToday(
+                            applicationContext,
+                            notificationId
+                        )
+                    ) {
+                        NotificationLogger.addNotification(
+                            applicationContext,
+                            "PersistentNotificationService notify with ${messages[i]}"
+                        )
                         showNotification(messages[i], notificationId)
                         hasDisplayedMessages = true
                     }
                 }
                 if (hasDisplayedMessages) {
+                    NotificationLogger.addNotification(
+                        applicationContext,
+                        "PersistentNotificationService hasDisplayedMessages"
+                    )
                     return START_REDELIVER_INTENT
                 }
             }
+
+            stopReason = "data with " +
+                    if (messages == null) {
+                        "messages == null "
+                    } else {
+                        "messages.size ${messages.size} "
+                    } + if (ids == null) {
+                "ids == null "
+            } else {
+                "ids.size ${ids.size} "
+            }
         }
 
+
+        NotificationLogger.addNotification(applicationContext, "PersistentNotificationService stopSelf because $stopReason")
         stopSelf()
         return START_NOT_STICKY
     }
@@ -73,6 +107,7 @@ class PersistentNotificationService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         showNotification("Running")
+        NotificationLogger.addNotification(applicationContext, "PersistentNotificationService onCreate")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

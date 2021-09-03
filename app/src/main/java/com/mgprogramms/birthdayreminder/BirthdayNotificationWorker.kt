@@ -24,6 +24,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
+        NotificationLogger.addNotification(applicationContext, "BirthdayNotificationWorker start")
         val sharedPref = applicationContext.getSharedPreferences(
             "BirthdayReminderNotifierWorker",
             Context.MODE_PRIVATE
@@ -39,13 +40,15 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
 
         notifyAboutBirthdays(applicationContext)
 
+        NotificationLogger.addNotification(applicationContext, "BirthdayNotificationWorker finish")
         // Indicate whether the work finished successfully with the Result
         return Result.success()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStopped() {
-        showNotification("BirthdayReminderNotifierWorker stopped")
+        showNotification("BirthdayNotificationWorker stopped")
+        NotificationLogger.addNotification(applicationContext, "BirthdayNotificationWorker stopped")
         super.onStopped()
     }
 
