@@ -9,5 +9,7 @@
     <string name="removable_notifications">Entfernbare Benachrichtigungen</string>
     <string name="next_notification">Nächste Erinnerung in %d Stunden %02d Minuten</string>
     <string name="notification_history">Bernachrichtigungsverlauf</string>
+    <string name="title_notification_history">Benachrichtigungen</string>
     <string name="service_app_start">Hintergrundservice beim Öffnen der App starten</string>
+    <string name="delete_notification_history">Benachrichtigungsverlauf löschen</string>
 </resources>
