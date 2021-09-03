@@ -9,10 +9,14 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.mgprogramms.birthdayreminder.BirthdayNotificationWorker
 import com.mgprogramms.birthdayreminder.R
+import com.mgprogramms.birthdayreminder.TestWorker
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
 import com.mgprogramms.birthdayreminder.ui.history.NotificationHistory
+import java.time.Duration
 
 
 class NotificationsFragment : Fragment() {
@@ -66,6 +70,12 @@ class NotificationsFragment : Fragment() {
         }
 
 
+        binding.testWorker.setOnClickListener {
+            val workRequest = OneTimeWorkRequestBuilder<TestWorker>().apply {
+                setInitialDelay(Duration.ofSeconds(binding.delayTestWorker.text.toString().toLong()))
+            }.build()
+            WorkManager.getInstance(requireContext()).enqueue(workRequest)
+        }
         binding.openNotificationHistory.setOnClickListener {
             requireContext().startActivity(Intent(context, NotificationHistory::class.java))
         }
