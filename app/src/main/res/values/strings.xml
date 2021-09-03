@@ -9,4 +9,5 @@
     <string name="days">days</string>
     <string name="day">day</string>
     <string name="until_birthday_of">"until birthday of "</string>
+    <string name="removable_notifications">Removable notifications</string>
 </resources>

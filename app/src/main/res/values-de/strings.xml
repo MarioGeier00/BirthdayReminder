@@ -6,4 +6,5 @@
     <string name="days">Tage</string>
     <string name="day">Tag</string>
     <string name="until_birthday_of">"bis Geburtstag von "</string>
+    <string name="removable_notifications">Entfernbare Benachrichtigungen</string>
 </resources>

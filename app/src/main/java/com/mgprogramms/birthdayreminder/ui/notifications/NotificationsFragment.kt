@@ -38,6 +38,13 @@ class NotificationsFragment : Fragment() {
         binding.notificationSwitch.setOnCheckedChangeListener { _, _ ->
             notificationsViewModel.updateNotificationState(binding.notificationSwitch.isChecked)
         }
+
+
+        binding.removableNotifications.isChecked = notificationsViewModel.removeNotificationsActivated()
+
+        binding.removableNotifications.setOnCheckedChangeListener { _, _ ->
+            notificationsViewModel.updateRemoveNotifications(binding.removableNotifications.isChecked)
+        }
         return root
     }
 

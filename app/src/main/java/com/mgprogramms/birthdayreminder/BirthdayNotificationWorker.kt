@@ -112,7 +112,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             val sharedPref = context.getSharedPreferences(
                 "BirthdayReminderNotifierWorker",
                 Context.MODE_PRIVATE
-            );
+            )
             with(sharedPref.edit()) {
                 putBoolean("active", state)
                 apply()
@@ -121,7 +121,7 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
             if (state) {
                 enqueueSelf(context, notifyHasStarted = false, restart = true)
             } else {
-                dequeueSelf(context);
+                dequeueSelf(context)
             }
         }
     }
@@ -147,12 +147,13 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                     applicationContext,
                     notificationId,
                     Intent(applicationContext, RemoveNotificationReceiver::class.java).apply {
-                        putExtra(NOTIFICATION_ID, notificationId)
+                        putExtra(RemoveNotificationReceiver.NOTIFICATION_ID, notificationId)
                     },
                     PendingIntent.FLAG_IMMUTABLE
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setChannelId(CHANNEL_ID)
 
         val whatsAppNumber = getPhoneNumberByContactId(applicationContext, notificationId)
         if (whatsAppNumber != null) {
@@ -200,6 +201,9 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
         if (contacts != null) {
             val calendar = Calendar.getInstance()
 
+            val birthdayNames = emptyList<String>().toMutableList()
+            val contactIds = emptyList<Int>().toMutableList()
+
             for (i in 0 until contacts.count) {
 
                 val date = getBirthdayByIndex(contacts, i)
@@ -214,14 +218,21 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                         parsedDate.dayOfMonth == currentDay
                     ) {
                         val contactName = getContactNameByIndex(contacts, i)
-                        val contactId = getContactIdByIndex(contacts, i);
+                        val contactId = getContactIdByIndex(contacts, i)
                         val title = "$contactName hat Geburtstag"
-                        showNotification(
-                            title,
-                            if (contactId !== null) contactId else NOTIFICATION_ID_BIRTHDAY
-                        )
+
+                        if (contactId == null) {
+                            contactIds.add(1)
+                        } else {
+                            contactIds.add(contactId)
+                        }
+                        birthdayNames.add(title)
                     }
                 }
+            }
+
+            if (birthdayNames.isNotEmpty()) {
+                PersistentNotificationService.setNotifications(context, birthdayNames.toTypedArray(), contactIds.toIntArray())
             }
         }
     }

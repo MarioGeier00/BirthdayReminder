@@ -1,6 +1,7 @@
 package com.mgprogramms.birthdayreminder
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         // enqueueSelf worker in order to activate the service right after
         // the user has installed and opened the app
         BirthdayNotificationWorker.enqueueSelf(applicationContext, false);
+
+        val i = Intent(applicationContext, PersistentNotificationService::class.java)
+        applicationContext.startService(i)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

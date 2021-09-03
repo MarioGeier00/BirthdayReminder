@@ -6,17 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.notifications.NotificationsFragment">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/notification_switch"
-        android:text="@string/notifications"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/notification_switch"
+                android:text="@string/notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="20sp"
+                android:layout_marginLeft="24dp" android:layout_marginRight="16dp"/>
+        <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/removable_notifications"
+                android:text="@string/removable_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="20sp"
+                android:layout_marginRight="16dp" android:layout_marginLeft="24dp"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
