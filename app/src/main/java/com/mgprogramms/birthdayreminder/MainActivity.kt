@@ -13,7 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.mgprogramms.birthdayreminder.birthday.BirthdayNotificationWorker
+import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
 import com.mgprogramms.birthdayreminder.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -24,10 +24,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (BirthdayNotificationWorker.enqueueAtAppStartup(applicationContext)) {
+        if (BirthdayWorker.enqueueAtAppStartup(applicationContext)) {
             // enqueueSelf worker in order to activate the service right after
             // the user has installed and opened the app
-            BirthdayNotificationWorker.enqueueSelf(applicationContext, false);
+            BirthdayWorker.enqueueSelf(applicationContext, false);
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)

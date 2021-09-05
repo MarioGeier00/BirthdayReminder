@@ -16,7 +16,7 @@ import java.time.Duration
 import java.time.LocalTime
 import java.util.*
 
-class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
+class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
     appContext: Context,
     workerParams: WorkerParameters
 ) : Worker(
@@ -91,11 +91,11 @@ class BirthdayNotificationWorker @RequiresApi(Build.VERSION_CODES.O) constructor
                 delayDuration = delayDuration.plusDays(1)
 
                 WorkManager.getInstance(context)
-                    .enqueue(OneTimeWorkRequestBuilder<BirthdayNotificationWorker>().build())
+                    .enqueue(OneTimeWorkRequestBuilder<BirthdayWorker>().build())
             }
 
             val notificationWork =
-                PeriodicWorkRequestBuilder<BirthdayNotificationWorker>(
+                PeriodicWorkRequestBuilder<BirthdayWorker>(
                     Duration.ofHours(6),
                     Duration.ofHours(1)
                 ).setInitialDelay(delayDuration).build()
