@@ -11,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat
 import com.mgprogramms.birthdayreminder.CONTACT_ID
 import com.mgprogramms.birthdayreminder.OpenChatReceiver
 import com.mgprogramms.birthdayreminder.R
-import com.mgprogramms.birthdayreminder.RemoveNotificationReceiver
 import com.mgprogramms.birthdayreminder.birthday.BirthdayData
 import com.mgprogramms.birthdayreminder.birthday.Contacts
 

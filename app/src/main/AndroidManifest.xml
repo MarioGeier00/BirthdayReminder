@@ -29,7 +29,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".RemoveNotificationReceiver"
+            android:name=".notifications.RemoveNotificationReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver

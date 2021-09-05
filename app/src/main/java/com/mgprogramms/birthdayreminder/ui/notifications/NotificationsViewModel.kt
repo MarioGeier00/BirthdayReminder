@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
-import com.mgprogramms.birthdayreminder.RemoveNotificationReceiver
+import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
 
 class NotificationsViewModel(application: Application) : AndroidViewModel(application) {
     @RequiresApi(Build.VERSION_CODES.O)

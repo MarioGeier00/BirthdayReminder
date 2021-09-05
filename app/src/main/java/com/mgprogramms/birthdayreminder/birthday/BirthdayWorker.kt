@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.mgprogramms.birthdayreminder.*
 import com.mgprogramms.birthdayreminder.R
+import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
 import java.time.Duration
 import java.time.LocalTime
 import java.util.*
