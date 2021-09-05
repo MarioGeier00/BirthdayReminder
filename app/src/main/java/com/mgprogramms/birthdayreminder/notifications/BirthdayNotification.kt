@@ -17,10 +17,10 @@ import com.mgprogramms.birthdayreminder.birthday.Contacts
 
 class BirthdayNotification {
     companion object {
-        const val CHANNEL_ID = "BirthdayNotification"
+        private const val CHANNEL_ID = "BirthdayNotification"
 
         fun show(context: Context, birthdayData: BirthdayData) {
-            createNotificationChannel()
+            createNotificationChannel(context)
 
             val title = "Geburtstag"
             val text = "${birthdayData.name} hat heute Geburtstag"
@@ -36,49 +36,49 @@ class BirthdayNotification {
                     PendingIntent.getBroadcast(
                         context,
                         birthdayData.id,
-                        Intent(applicationContext, RemoveNotificationReceiver::class.java).apply {
-                            putExtra(RemoveNotificationReceiver.NOTIFICATION_ID, notificationId)
+                        Intent(context, RemoveNotificationReceiver::class.java).apply {
+                            putExtra(RemoveNotificationReceiver.NOTIFICATION_ID, birthdayData.id)
                         },
                         PendingIntent.FLAG_IMMUTABLE
                     )
                 )
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-            val whatsAppNumber = Contacts.getPhoneNumberByContactId(applicationContext, notificationId)
+            val whatsAppNumber = Contacts.getPhoneNumberByContactId(context, birthdayData.id)
             if (whatsAppNumber != null) {
                 builder = builder.addAction(
                     R.id.icon, "Send message to $whatsAppNumber",
                     PendingIntent.getBroadcast(
-                        applicationContext,
-                        notificationId,
-                        Intent(applicationContext, OpenChatReceiver::class.java).apply {
-                            putExtra(CONTACT_ID, notificationId)
+                        context,
+                        birthdayData.id,
+                        Intent(context, OpenChatReceiver::class.java).apply {
+                            putExtra(CONTACT_ID, birthdayData.id)
                         },
                         PendingIntent.FLAG_IMMUTABLE
                     )
                 )
             }
 
-            with(NotificationManagerCompat.from(applicationContext)) {
+            with(NotificationManagerCompat.from(context)) {
                 // notificationId is a unique int for each notification that you must define
-                notify(notificationId, builder.build())
+                notify(birthdayData.id, builder.build())
             }
         }
 
-        private fun createNotificationChannel() {
+        private fun createNotificationChannel(context: Context) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = applicationContext.resources.getString(R.string.notifications)
+                val name = context.resources.getString(R.string.notifications)
                 val descriptionText =
-                    applicationContext.resources.getString(R.string.notifications_description)
+                    context.resources.getString(R.string.notifications_description)
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
                 val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                     description = descriptionText
                 }
                 // Register the channel with the system
                 val notificationManager: NotificationManager =
-                    applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
                 notificationManager.createNotificationChannel(channel)
             }
