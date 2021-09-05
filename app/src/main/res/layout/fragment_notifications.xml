@@ -52,6 +52,23 @@
             android:text="@string/service_app_start"
             android:textSize="20sp" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/use_test_person"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/use_test_person"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/test_person_explanation" />
+
+
     </LinearLayout>
 
 

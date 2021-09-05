@@ -7,14 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mgprogramms.birthdayreminder.getBirthdayByIndex
-import com.mgprogramms.birthdayreminder.getContactNameByIndex
-import com.mgprogramms.birthdayreminder.getContacts
-import com.mgprogramms.birthdayreminder.parseDate
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
-import java.util.*
+import com.mgprogramms.birthdayreminder.birthday.BirthdayData
+import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
 
 @RequiresApi(Build.VERSION_CODES.O)
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -23,61 +17,30 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _nameOfNextBirthday = MutableLiveData<String>()
 
-    private val _daysUntilNextBirthday = MutableLiveData<Int>().apply {
+    private val _daysUntilNextBirthday = MutableLiveData<Long>().apply {
         value = getDaysUntilNextBirthday()
     }
 
 
-    private fun getDaysUntilNextBirthday(): Int? {
-        val contacts = getContacts(getContext())
+    private fun getDaysUntilNextBirthday(): Long? {
+        val birthdayProvider = BirthdayProviderFactory.buildProvider(getContext())
 
-        if (contacts != null) {
+        val birthdays = birthdayProvider.getBirthdays()
 
-            val calendar = Calendar.getInstance()
-
-            var savedIndex = -1
-            var minDays = Int.MAX_VALUE
-
-            for (i in 0 until contacts.count) {
-                val date = getBirthdayByIndex(contacts, i)
-                if (date != null) {
-                    val parsedDate = parseDate(date).parsedDate
-                    var currentDate = calendar.time.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
-
-                    val birthdayInCurrentYear =
-                        LocalDate.of(currentDate.year, parsedDate.monthValue, parsedDate.dayOfMonth)
-
-                    if (birthdayInCurrentYear < currentDate) {
-                        currentDate = currentDate.minusYears(1)
-                    }
-
-                    val daysUntilBirthday = ChronoUnit.DAYS.between(
-                        currentDate, birthdayInCurrentYear
-                    )
-
-                    if (daysUntilBirthday < minDays) {
-                        savedIndex = i
-                        minDays = daysUntilBirthday.toInt()
-                    }
+        if (birthdays.isNotEmpty()) {
+            var closestBirthday: BirthdayData = birthdays.first()
+            for (birthday in birthdays) {
+                if (birthday.daysUntilNextBirthday() < closestBirthday.daysUntilNextBirthday()) {
+                    closestBirthday = birthday
                 }
             }
-
-            if (savedIndex >= 0) {
-                val contactName = getContactNameByIndex(
-                    getContext(),
-                    savedIndex
-                )
-                if (contactName != null) {
-                    _nameOfNextBirthday.value = contactName!!
-                }
-                return minDays
-            }
+            _nameOfNextBirthday.value = closestBirthday.name
+            return closestBirthday.daysUntilNextBirthday()
         }
+
         return null
     }
 
     val nameOfNextBirthday: LiveData<String> = _nameOfNextBirthday
-    val daysUntilNextBirthday: LiveData<Int> = _daysUntilNextBirthday
+    val daysUntilNextBirthday: LiveData<Long> = _daysUntilNextBirthday
 }

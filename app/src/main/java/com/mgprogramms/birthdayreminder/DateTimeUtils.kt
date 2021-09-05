@@ -4,10 +4,17 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
+import java.time.temporal.ChronoField
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun createFriendlyDate(date: String, parsePattern: String = "yyyy-MM-dd", formatStyle: FormatStyle = FormatStyle.LONG): String {
+fun createFriendlyDate(
+    date: String,
+    parsePattern: String = "yyyy-MM-dd",
+    formatStyle: FormatStyle = FormatStyle.LONG
+): String {
     val parseResult = parseDate(date);
 
     return if (parseResult.yearless) {
@@ -19,17 +26,22 @@ fun createFriendlyDate(date: String, parsePattern: String = "yyyy-MM-dd", format
 
 const val YEARLESS_DATE_PATTERN = "MM-dd"
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun parseDate(date: String, parsePattern: String = "yyyy-MM-dd"): DateParseResult {
-    return if (date.length == parsePattern.length) {
-        DateParseResult(LocalDate.parse(date, DateTimeFormatter.ofPattern(parsePattern)), false)
-    } else if (date.length == YEARLESS_DATE_PATTERN.length) {
-        DateParseResult(parseDate("2020-$date").parsedDate, true)
-    } else {
-        DateParseResult(parseDate("2020-" + date.removeRange(0, 2)).parsedDate, true)
+fun parseDate(date: String, parsePattern: String = "yyyy-MM-dd"): BirthDate {
+    return when (date.length) {
+        parsePattern.length -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                BirthDate(LocalDate.parse(date, DateTimeFormatter.ofPattern(parsePattern)), false)
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+        }
+        YEARLESS_DATE_PATTERN.length -> {
+            BirthDate(parseDate("2020-$date").parsedDate, true)
+        }
+        else -> {
+            BirthDate(parseDate("2020-" + date.removeRange(0, 2)).parsedDate, true)
+        }
     }
 }
 
-class DateParseResult(result: LocalDate, var yearless: Boolean) {
-    var parsedDate: LocalDate = result;
-}
+data class BirthDate(val parsedDate: LocalDate, val yearless: Boolean)

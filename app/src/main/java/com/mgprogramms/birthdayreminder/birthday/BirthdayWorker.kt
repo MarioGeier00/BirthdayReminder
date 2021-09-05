@@ -40,6 +40,7 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
             }
         }
 
+
         notifyAboutBirthdays(applicationContext)
 
         NotificationLogger.addNotification(applicationContext, "BirthdayNotificationWorker finish")
@@ -186,7 +187,7 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val whatsAppNumber = getPhoneNumberByContactId(applicationContext, notificationId)
+        val whatsAppNumber = Contacts.getPhoneNumberByContactId(applicationContext, notificationId)
         if (whatsAppNumber != null) {
             builder = builder.addAction(
                 R.id.icon, "Send message to $whatsAppNumber",
@@ -228,13 +229,13 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun notifyAboutBirthdays(context: Context) {
-        val contacts = getContacts(context)
+        val contacts = Contacts.getContacts(context)
         if (contacts != null) {
             val calendar = Calendar.getInstance()
 
             for (i in 0 until contacts.count) {
 
-                val date = getBirthdayByIndex(contacts, i)
+                val date = Contacts.getBirthdayByIndex(contacts, i)
 
                 if (date != null) {
                     val parsedDate = parseDate(date).parsedDate
@@ -245,8 +246,8 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
                     if (parsedDate.monthValue == currentMonth &&
                         parsedDate.dayOfMonth == currentDay
                     ) {
-                        val contactName = getContactNameByIndex(contacts, i)
-                        val contactId = getContactIdByIndex(contacts, i)
+                        val contactName = Contacts.getContactNameByIndex(contacts, i)
+                        val contactId = Contacts.getContactIdByIndex(contacts, i)
                         val title = "$contactName hat Geburtstag"
 
                         if (contactName != null && contactId != null) {

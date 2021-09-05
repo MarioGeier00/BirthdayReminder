@@ -16,4 +16,6 @@
     <string name="delete_notification_history">Delete notification history</string>
     <string name="service_app_start">Start service with app start</string>
     <string name="test_worker" translatable="false">Test Worker</string>
+    <string name="use_test_person">Use test person</string>
+    <string name="test_person_explanation">Use this setting to test the notification settings. It creates a new Test Person who was birthday every day.</string>
 </resources>

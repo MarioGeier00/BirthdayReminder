@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
         homeViewModel.daysUntilNextBirthday.observe(viewLifecycleOwner, {
             binding.textDaysUntilBirthday.text = it.toString()
             binding.textDays.text = requireContext().resources.getString(R.string.days)
-            if (it == 1) {
+            if (it == 1L) {
                 binding.textDays.text = requireContext().resources.getString(R.string.day)
             }
 

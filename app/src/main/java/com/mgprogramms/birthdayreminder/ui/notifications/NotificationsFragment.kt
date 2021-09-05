@@ -11,9 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
 import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.TestWorker
+import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
+import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
 import com.mgprogramms.birthdayreminder.ui.history.NotificationHistory
 import java.time.Duration
@@ -67,6 +68,13 @@ class NotificationsFragment : Fragment() {
 
         binding.serviceAppStart.setOnCheckedChangeListener { _, _ ->
             BirthdayWorker.setEnqueueAtAppStartup(requireContext(), binding.serviceAppStart.isChecked)
+        }
+
+
+        binding.useTestPerson.isChecked = BirthdayProviderFactory.shouldUseTestPerson(requireContext())
+
+        binding.useTestPerson.setOnCheckedChangeListener { _, _ ->
+            BirthdayProviderFactory.setUseTestPerson(requireContext(), binding.useTestPerson.isChecked)
         }
 
 

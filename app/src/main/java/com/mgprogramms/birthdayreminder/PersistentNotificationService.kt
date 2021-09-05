@@ -12,6 +12,7 @@ import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.mgprogramms.birthdayreminder.birthday.Contacts.Companion.getPhoneNumberByContactId
 
 class PersistentNotificationService : Service() {
 

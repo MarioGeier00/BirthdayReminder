@@ -16,10 +16,10 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.mgprogramms.birthdayreminder.R
+import com.mgprogramms.birthdayreminder.birthday.Contacts.Companion.getContactIdByIndex
+import com.mgprogramms.birthdayreminder.birthday.Contacts.Companion.getContacts
 import com.mgprogramms.birthdayreminder.createFriendlyDate
 import com.mgprogramms.birthdayreminder.databinding.FragmentDashboardBinding
-import com.mgprogramms.birthdayreminder.getContactIdByIndex
-import com.mgprogramms.birthdayreminder.getContacts
 
 class DashboardFragment : Fragment() {
 

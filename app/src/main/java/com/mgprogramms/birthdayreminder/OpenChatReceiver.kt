@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import com.mgprogramms.birthdayreminder.birthday.Contacts.Companion.getPhoneNumberByContactId
 
 const val CONTACT_ID = "contactId"
 
