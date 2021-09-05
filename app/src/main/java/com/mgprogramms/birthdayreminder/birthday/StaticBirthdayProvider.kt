@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import com.mgprogramms.birthdayreminder.BirthDate
 import java.time.LocalDate
+import kotlin.math.abs
 
 class StaticBirthdayProvider(context: Context, var data: Array<BirthdayData>) : BirthdayProvider(context) {
     override fun getBirthdays(): Array<BirthdayData> {
@@ -15,7 +16,7 @@ class StaticBirthdayProvider(context: Context, var data: Array<BirthdayData>) : 
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 StaticBirthdayProvider(
                     context,
-                    arrayOf(BirthdayData(BirthDate(LocalDate.now(), false), name, "StaticBirthdayProvider$name"))
+                    arrayOf(BirthdayData(BirthDate(LocalDate.now(), false), name, abs("StaticBirthdayProvider$name".hashCode())))
                 )
             } else {
                 TODO("VERSION.SDK_INT < O")

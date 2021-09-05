@@ -12,6 +12,12 @@ class NotificationWorker(context: Context, workerParameters: WorkerParameters) :
     override fun doWork(): Result {
         birthdayProvider = BirthdayProviderFactory.buildProvider(applicationContext)
 
-        throw NotImplementedError()
+        for (birthday in birthdayProvider.getBirthdays()) {
+            if (birthday.hasBirthday()) {
+                BirthdayNotification.show(applicationContext, birthday)
+            }
+        }
+
+        return Result.success()
     }
 }
