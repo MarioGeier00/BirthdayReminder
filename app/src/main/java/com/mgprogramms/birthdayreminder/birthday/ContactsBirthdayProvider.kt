@@ -25,7 +25,7 @@ class ContactsBirthdayProvider
 
         val where =
             ContactsContract.Data.MIMETYPE + "= ? AND " +
-            ContactsContract.CommonDataKinds.Event.TYPE + "= ?"
+                    ContactsContract.CommonDataKinds.Event.TYPE + "= ?"
 
         val selectionArgs: Array<String> = arrayOf(
             ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
@@ -52,7 +52,7 @@ class ContactsBirthdayProvider
             val name = contactsCursor.getString(nameIndex)
             val birthday = contactsCursor.getString(birthdayIndex)
             val idIndex = contactsCursor.getInt(idIndex)
-            birthdays.add(BirthdayData(parseDate(birthday), name, idIndex.toString()))
+            birthdays.add(BirthdayData(parseDate(birthday), name, idIndex))
         }
         return birthdays.toTypedArray()
     }

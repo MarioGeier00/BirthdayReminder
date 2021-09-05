@@ -14,8 +14,8 @@ import androidx.work.WorkManager
 import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.TestWorker
 import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
-import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding
+import com.mgprogramms.birthdayreminder.notifications.NotificationWorker
 import com.mgprogramms.birthdayreminder.ui.history.NotificationHistory
 import java.time.Duration
 
@@ -41,7 +41,7 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val durationUntilNextNotification = BirthdayWorker.getDurationUntilNextNotification()
+        val durationUntilNextNotification = NotificationWorker.getDurationUntilNextNotification()
         binding.nextNotification.text = String.format(
             resources.getString(R.string.next_notification),
             durationUntilNextNotification.toHours(),
@@ -64,10 +64,10 @@ class NotificationsFragment : Fragment() {
         }
 
 
-        binding.serviceAppStart.isChecked = BirthdayWorker.enqueueAtAppStartup(requireContext())
+        binding.serviceAppStart.isChecked = NotificationWorker.enqueueAtAppStartup(requireContext())
 
         binding.serviceAppStart.setOnCheckedChangeListener { _, _ ->
-            BirthdayWorker.setEnqueueAtAppStartup(requireContext(), binding.serviceAppStart.isChecked)
+            NotificationWorker.setEnqueueAtAppStartup(requireContext(), binding.serviceAppStart.isChecked)
         }
 
 

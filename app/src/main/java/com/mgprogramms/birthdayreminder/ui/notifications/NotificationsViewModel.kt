@@ -6,17 +6,17 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mgprogramms.birthdayreminder.birthday.BirthdayWorker
+import com.mgprogramms.birthdayreminder.notifications.NotificationWorker
 import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
 
 class NotificationsViewModel(application: Application) : AndroidViewModel(application) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateNotificationState(state: Boolean) {
-        BirthdayWorker.updateState(getApplication<Application>().applicationContext, state)
+        NotificationWorker.updateState(getApplication<Application>().applicationContext, state)
     }
 
     private val _notifications = MutableLiveData<Boolean>().apply {
-        value = BirthdayWorker.isActivated(getApplication<Application>().applicationContext)
+        value = NotificationWorker.isActivated(getApplication<Application>().applicationContext)
     }
     val notifications: LiveData<Boolean> = _notifications
 

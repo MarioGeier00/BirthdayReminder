@@ -20,13 +20,9 @@ class RemoveNotificationReceiver : BroadcastReceiver() {
             cancel(notificationId)
         }
 
-        val sharedPref = getSharedPref(context)
-
-        if (sharedPref != null) {
-            with(sharedPref.edit()) {
-                putString(notificationId.toString(), LocalDate.now().toString())
-                apply()
-            }
+        with(getSharedPref(context).edit()) {
+            putString(notificationId.toString(), LocalDate.now().toString())
+            apply()
         }
     }
 
@@ -35,7 +31,7 @@ class RemoveNotificationReceiver : BroadcastReceiver() {
         private const val IS_ACTIVATED = "isActivated"
 
 
-        fun getSharedPref(context: Context): SharedPreferences? {
+        fun getSharedPref(context: Context): SharedPreferences {
             return context.getSharedPreferences(
                 "BirthdayReminderClosedNotifications",
                 Context.MODE_PRIVATE
@@ -43,37 +39,31 @@ class RemoveNotificationReceiver : BroadcastReceiver() {
         }
 
         fun isActivated(context: Context): Boolean {
-            val sharedPref = getSharedPref(context)
-            if (sharedPref != null) {
-                return sharedPref.getBoolean(IS_ACTIVATED, false)
+            return with(getSharedPref(context)) {
+                getBoolean(IS_ACTIVATED, false)
             }
-            return false
         }
 
         fun setActivatedState(context: Context, activated: Boolean) {
-            val sharedPref = getSharedPref(context)
-
-            if (sharedPref != null) {
-                with(sharedPref.edit()) {
-                    if (!activated) {
-                        clear()
-                    }
-                    putBoolean(IS_ACTIVATED, activated)
-                    apply()
+            with(getSharedPref(context).edit()) {
+                if (!activated) {
+                    clear()
                 }
+                putBoolean(IS_ACTIVATED, activated)
+                apply()
             }
         }
 
-        @RequiresApi(Build.VERSION_CODES.O)
         fun hasBeenRemovedToday(context: Context, notificationId: Int): Boolean {
             val sharedPref = getSharedPref(context)
-            if (sharedPref != null) {
-                val dismissDate = sharedPref.getString(notificationId.toString(), null)
-                val today = LocalDate.now().toString()
-
-                return dismissDate == today
+            val dismissDate = sharedPref.getString(notificationId.toString(), null)
+            val today = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDate.now().toString()
+            } else {
+                TODO("VERSION.SDK_INT < O")
             }
-            return false
+
+            return dismissDate == today
         }
     }
 }
