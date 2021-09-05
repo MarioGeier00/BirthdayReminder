@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.mgprogramms.birthdayreminder.BirthdayNotificationWorker
+import com.mgprogramms.birthdayreminder.birthday.BirthdayNotificationWorker
 import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.TestWorker
 import com.mgprogramms.birthdayreminder.databinding.FragmentNotificationsBinding

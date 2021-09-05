@@ -1,4 +1,4 @@
-package com.mgprogramms.birthdayreminder
+package com.mgprogramms.birthdayreminder.birthday
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
+import com.mgprogramms.birthdayreminder.*
+import com.mgprogramms.birthdayreminder.R
 import java.time.Duration
 import java.time.LocalTime
 import java.util.*
