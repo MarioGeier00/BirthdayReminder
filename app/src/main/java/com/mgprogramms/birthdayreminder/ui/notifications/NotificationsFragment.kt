@@ -42,10 +42,16 @@ class NotificationsFragment : Fragment() {
         val root: View = binding.root
 
         val durationUntilNextNotification = NotificationWorker.getDurationUntilNextNotification()
+
+        val minutes = if (durationUntilNextNotification.toHours() > 0) {
+            durationUntilNextNotification.toMinutes() % (durationUntilNextNotification.toHours() * 60)
+        } else {
+            durationUntilNextNotification.toMinutes()
+        }
         binding.nextNotification.text = String.format(
             resources.getString(R.string.next_notification),
             durationUntilNextNotification.toHours(),
-            durationUntilNextNotification.toMinutes() % (durationUntilNextNotification.toHours() * 60)
+            minutes
         )
 
         // only load the notification state once in the beginning to
