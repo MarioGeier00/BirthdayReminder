@@ -4,10 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 import java.time.format.FormatStyle
-import java.time.temporal.ChronoField
-import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun createFriendlyDate(

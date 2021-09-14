@@ -19,11 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirthdayReminder">
 
-        <service
-            android:name=".PersistentNotificationService"
-            android:enabled="true"
-            android:exported="false" />
-
         <receiver
             android:name=".OpenChatReceiver"
             android:enabled="true"
