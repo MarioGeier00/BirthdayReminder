@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:paddingStart="24dp"
-        android:paddingEnd="16dp">
+        android:paddingLeft="24dp"
+        android:paddingEnd="16dp"
+        android:paddingRight="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/test_worker"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/notification_switch"
@@ -71,25 +71,12 @@
 
     </LinearLayout>
 
-
-    <EditText
-        android:id="@+id/delay_test_worker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:text="60"
-        app:layout_constraintBottom_toTopOf="@+id/test_worker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/test_worker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="@string/test_worker"
+        android:text="@string/test_notification_worker"
         app:layout_constraintBottom_toTopOf="@id/open_notification_history"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

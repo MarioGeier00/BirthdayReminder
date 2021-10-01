@@ -85,9 +85,7 @@ class NotificationsFragment : Fragment() {
 
 
         binding.testWorker.setOnClickListener {
-            val workRequest = OneTimeWorkRequestBuilder<TestWorker>().apply {
-                setInitialDelay(Duration.ofSeconds(binding.delayTestWorker.text.toString().toLong()))
-            }.build()
+            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>().build()
             WorkManager.getInstance(requireContext()).enqueue(workRequest)
         }
         binding.openNotificationHistory.setOnClickListener {

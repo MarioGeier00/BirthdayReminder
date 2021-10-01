@@ -12,6 +12,7 @@
     <string name="title_notification_history">Benachrichtigungen</string>
     <string name="service_app_start">Hintergrundservice beim Öffnen der App starten</string>
     <string name="delete_notification_history">Benachrichtigungsverlauf löschen</string>
+    <string name="test_notification_worker">Erinnerungen anzeigen</string>
     <string name="use_test_person">Test Person anzeigen</string>
     <string name="test_person_explanation">Use this setting to test the notification settings. It creates a new Test Person who was birthday every day.</string>
 </resources>
