@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="notifications">Benachrichtigungen zu Geburtstagen</string>
-    <string name="notifications_description">BirthdayReminder informiert dich über die Geburtstage deiner Kontakte</string>
-    <string name="birthday_not_found">Keinen Geburtstag gefunden</string>
+    <string name="home_screen">Home</string>
+    <string name="contact_list_screen">Kontakte</string>
+    <string name="settings_screen">Benachrichtigung</string>
+
+
+    <string name="settings_birthday_notification_title">BirthdayReminder Benachrichtigungen</string>
+    <string name="settings_birthday_notification_description">Birthdayreminder informiert dich über aktuelle Geburtstage.Dazu wird deine Kontaktliste genutzt.</string>
+
+    <string name="settings_next_notification">Nächste Benachrichtigung in %1$s h %2$s min</string>
+
+    <string name="settings_removable_notification_title">Entfernbare Benachrichtiung</string>
+    <string name="settings_start_service_on_app_start">Hintergrundservice beim Starten der App aktivieren</string>
+
+    <string name="settings_use_test_person_title">Test Person nutzen</string>
+    <string name="settings_use_test_person_description">Aktiviere diese Option, um die Hintergrundbenachrichtigung zu Testen. Es wird eine neue Test Person erstellt, die jeden Tag Geburtstag hat.</string>
+
+    <string name="settings_test_notification_worker">Erinnerung anzeigen</string>
+
+
+    <string name="notification_history">Benachrichtigungsverlauf</string>
+    <string name="title_notification_history">Benachrichtigungen</string>
+    <string name="delete_notification_history">Benachrichtigungsverlauf löschen</string>
+
+
+    <string name="birthday_not_found">Kein Geburtstag gefunden</string>
     <string name="days">Tage</string>
     <string name="day">Tag</string>
-    <string name="until_birthday_of">bis Geburtstag von %s</string>
-    <string name="removable_notifications">Entfernbare Benachrichtigungen</string>
-    <string name="next_notification">Nächste Erinnerung in %d Stunden %02d Minuten</string>
-    <string name="notification_history">Bernachrichtigungsverlauf</string>
-    <string name="title_notification_history">Benachrichtigungen</string>
-    <string name="service_app_start">Hintergrundservice beim Öffnen der App starten</string>
-    <string name="delete_notification_history">Benachrichtigungsverlauf löschen</string>
-    <string name="test_notification_worker">Erinnerungen anzeigen</string>
-    <string name="use_test_person">Test Person anzeigen</string>
-    <string name="test_person_explanation">Use this setting to test the notification settings. It creates a new Test Person who was birthday every day.</string>
+    <string name="until_birthday_of">bis Geburtstag von</string>
 </resources>

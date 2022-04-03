@@ -3,6 +3,8 @@ package com.mgprogramms.birthdayreminder.birthday
 import android.os.Build
 import com.mgprogramms.birthdayreminder.BirthDate
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 
 data class BirthdayData(val birthDate: BirthDate, val name: String, val id: Int) {
@@ -41,4 +43,11 @@ data class BirthdayData(val birthDate: BirthDate, val name: String, val id: Int)
                 currentDate.monthValue == birthDate.parsedDate.monthValue
     }
 
+    fun friendlyBirthdate(): String {
+        return if (birthDate.yearless) {
+              birthDate.parsedDate.format(DateTimeFormatter.ofPattern("dd. MMMM"))
+        } else {
+            birthDate.parsedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+        }
+    }
 }

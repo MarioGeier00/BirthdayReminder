@@ -1,21 +1,31 @@
 <resources>
     <string name="app_name" translatable="false">BirthdayReminder</string>
-    <string name="notifications">BirthdayReminder notifications</string>
-    <string name="notifications_description">BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth</string>
-    <string name="title_home" translatable="false">Home</string>
-    <string name="title_dashboard" translatable="false">Dashboard</string>
-    <string name="title_notifications" translatable="false">Notifications</string>
+    <string name="home_screen">Home</string>
+    <string name="contact_list_screen">Contacts</string>
+    <string name="settings_screen">Notifications</string>
+
+
+    <string name="settings_birthday_notification_title">BirthdayReminder notifications</string>
+    <string name="settings_birthday_notification_description">BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth</string>
+
+    <string name="settings_removable_notification_title">Removable notifications</string>
+
+    <string name="settings_next_notification">Scheduled notification in %1$s hours %2$s minutes</string>
+    <string name="settings_start_service_on_app_start">Start service with app start</string>
+
+    <string name="settings_use_test_person_title">Use test person</string>
+    <string name="settings_use_test_person_description">Activate to test the notification settings. It creates a new Test Person that has birthday every day.</string>
+
+    <string name="settings_test_notification_worker">Show notifications</string>
+
+
+    <string name="title_notification_history">Notifications</string>
+    <string name="delete_notification_history">Delete notification history</string>
+    <string name="notification_history">Notification history</string>
+
+
     <string name="birthday_not_found">No birthday found</string>
     <string name="days">days</string>
     <string name="day">day</string>
-    <string name="until_birthday_of">until birthday of %s</string>
-    <string name="removable_notifications">Removable notifications</string>
-    <string name="next_notification">Scheduled notification in %1$s minutes</string>
-    <string name="notification_history">Notification history</string>
-    <string name="title_notification_history">Notifications</string>
-    <string name="delete_notification_history">Delete notification history</string>
-    <string name="service_app_start">Start service with app start</string>
-    <string name="test_notification_worker">Show notifications</string>
-    <string name="use_test_person">Use test person</string>
-    <string name="test_person_explanation">Activate to test the notification settings. It creates a new Test Person that has birthday every day.</string>
+    <string name="until_birthday_of">until birthday of</string>
 </resources>

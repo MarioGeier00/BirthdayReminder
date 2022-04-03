@@ -11,8 +11,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.mgprogramms.birthdayreminder.*
-import com.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
+import de.mgprogramms.birthdayreminder.R
 import java.time.Duration
 import java.time.LocalTime
 import java.util.*
@@ -175,7 +175,7 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
             .setContentText("BirthdayReminder")
             .setOngoing(true)
             .addAction(
-                R.id.icon,
+               R.id.icon,
                 "Done",
                 PendingIntent.getBroadcast(
                     applicationContext,
@@ -213,9 +213,9 @@ class BirthdayWorker @RequiresApi(Build.VERSION_CODES.O) constructor(
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = applicationContext.resources.getString(R.string.notifications)
+            val name = applicationContext.resources.getString(R.string.settings_birthday_notification_title)
             val descriptionText =
-                applicationContext.resources.getString(R.string.notifications_description)
+                applicationContext.resources.getString(R.string.settings_birthday_notification_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText

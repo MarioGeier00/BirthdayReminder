@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.mgprogramms.birthdayreminder.CONTACT_ID
 import com.mgprogramms.birthdayreminder.OpenChatReceiver
-import com.mgprogramms.birthdayreminder.R
+import de.mgprogramms.birthdayreminder.R
 import com.mgprogramms.birthdayreminder.birthday.BirthdayData
 import com.mgprogramms.birthdayreminder.birthday.Contacts
 
@@ -68,9 +68,9 @@ class BirthdayNotification {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = context.resources.getString(R.string.notifications)
+                val name = context.resources.getString(R.string.settings_birthday_notification_title)
                 val descriptionText =
-                    context.resources.getString(R.string.notifications_description)
+                    context.resources.getString(R.string.settings_birthday_notification_description)
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
                 val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                     description = descriptionText
