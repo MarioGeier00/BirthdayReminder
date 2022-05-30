@@ -70,13 +70,11 @@ fun MainNavigationBar(navController: NavController) {
     NavigationBar {
         BottomBarDestination.values().forEach { destination ->
             NavigationBarItem(
-                icon = { Icon(destination.icon, contentDescription = stringResource(destination.label)) },
+                icon = { Icon(destination.icon, contentDescription = null) },
                 label = { Text(stringResource(destination.label)) },
                 selected = currentDestination == destination.direction,
                 onClick = {
-                    navController.navigateTo(destination.direction) {
-                        launchSingleTop = true
-                    }
+                    navController.navigateTo(destination.direction)
                 },
             )
         }

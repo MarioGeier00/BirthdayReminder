@@ -119,7 +119,8 @@ fun SettingsSwitch(state: State<Boolean>, stateChange: (Boolean) -> Unit, title:
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.clickable { stateChange(!state.value) }
-            .padding(22.dp, 16.dp),
+            .padding(22.dp, 16.dp)
+            .fillMaxWidth(),
     ) {
         Column(Modifier.fillMaxWidth(0.86f)) {
             Text(title, fontSize = 22.sp)
@@ -128,12 +129,10 @@ fun SettingsSwitch(state: State<Boolean>, stateChange: (Boolean) -> Unit, title:
                 Text(description)
             }
         }
-        Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
-            Switch(
-                checked = state.value,
-                onCheckedChange = stateChange
-            )
-        }
+        Switch(
+            checked = state.value,
+            onCheckedChange = stateChange
+        )
     }
 }
 
