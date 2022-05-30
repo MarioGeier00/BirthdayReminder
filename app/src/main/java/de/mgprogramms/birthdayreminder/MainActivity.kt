@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -23,6 +23,7 @@ import de.mgprogramms.birthdayreminder.destinations.*
 import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,12 +35,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             BirthdayReminderTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    color = MaterialTheme.colors.background,
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    Scaffold(bottomBar = { NavigationBar(navController) }) {
+                    Scaffold(bottomBar = { MainNavigationBar(navController) }) {
                         DestinationsNavHost(
                             navGraph = NavGraphs.root,
                             navController = navController,
@@ -56,42 +56,41 @@ enum class BottomBarDestination(
     val icon: ImageVector,
     @StringRes val label: Int
 ) {
-    Home(HomeDestination, Icons.Default.Home, R.string.home_screen),
-    ContactList(ContactListDestination, Icons.Default.AccountCircle, R.string.contact_list_screen),
-    Settings(SettingsDestination, Icons.Default.Settings, R.string.settings_screen),
+    Home(HomeDestination, Icons.Filled.Home, R.string.home_screen),
+    ContactList(ContactListDestination, Icons.Filled.AccountCircle, R.string.contact_list_screen),
+    Settings(SettingsDestination, Icons.Filled.Settings, R.string.settings_screen),
 }
 
 
 @Composable
-fun NavigationBar(navController: NavController) {
+fun MainNavigationBar(navController: NavController) {
     val currentDestination: Destination? = navController.currentBackStackEntryAsState()
         .value?.navDestination
 
-    BottomNavigation {
+    NavigationBar {
         BottomBarDestination.values().forEach { destination ->
-            BottomNavigationItem(
+            NavigationBarItem(
+                icon = { Icon(destination.icon, contentDescription = stringResource(destination.label)) },
+                label = { Text(stringResource(destination.label)) },
                 selected = currentDestination == destination.direction,
                 onClick = {
                     navController.navigateTo(destination.direction) {
                         launchSingleTop = true
                     }
                 },
-                icon = { Icon(destination.icon, contentDescription = stringResource(destination.label)) },
-                label = { Text(stringResource(destination.label)) },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = MaterialTheme.colors.onBackground
             )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
     BirthdayReminderTheme {
         val navController = rememberNavController()
-        Scaffold(bottomBar = { NavigationBar(navController) }) {
+        Scaffold(bottomBar = { MainNavigationBar(navController) }) {
             DestinationsNavHost(navGraph = NavGraphs.root, navController = navController)
         }
     }

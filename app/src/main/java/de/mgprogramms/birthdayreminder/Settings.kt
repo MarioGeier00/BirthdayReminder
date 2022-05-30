@@ -3,12 +3,12 @@ package de.mgprogramms.birthdayreminder
 import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -65,7 +65,7 @@ fun Settings() {
             durationUntilNextNotification.toMinutes()
         }
         Row(Modifier.padding(22.dp, 16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Info, "info")
+            Icon(Icons.Outlined.Info, "info")
             Spacer(Modifier.width(8.dp))
             Text(
                 String.format(
