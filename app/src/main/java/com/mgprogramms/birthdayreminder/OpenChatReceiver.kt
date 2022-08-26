@@ -17,7 +17,7 @@ const val CONTACT_ID = "contactId"
 
 class OpenChatReceiver : BroadcastReceiver() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onReceive(context: Context, intent: Intent) {
         val contactId = intent.extras?.get(CONTACT_ID) as Int?
         if (contactId != null) {
@@ -27,7 +27,7 @@ class OpenChatReceiver : BroadcastReceiver() {
             val message = "Hallo $name! Ich wünsche dir alles Gute zu deinem Geburtstag!"
             val url = "https://api.whatsapp.com/send?phone=$phoneNumber&text=${URLEncoder.encode(message, "UTF-8")}"
             try {
-                context.packageManager.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES)
+                context.packageManager.getPackageInfo("com.whatsapp", PackageManager.PackageInfoFlags.of(PackageManager.GET_ACTIVITIES.toLong()))
                 val newActivity = Intent(Intent.ACTION_VIEW).apply {
                     data = Uri.parse(url)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -36,7 +36,7 @@ class OpenChatReceiver : BroadcastReceiver() {
             } catch (e: PackageManager.NameNotFoundException) {
                 Toast.makeText(
                     context,
-                    "Whatsapp is not installed in your phone.",
+                    "Whatsapp is not installed on your phone.",
                     Toast.LENGTH_SHORT
                 ).show()
                 e.printStackTrace()

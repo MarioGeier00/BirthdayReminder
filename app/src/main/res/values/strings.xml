@@ -16,8 +16,7 @@
     <string name="settings_use_test_person_title">Use test person</string>
     <string name="settings_use_test_person_description">Activate to test the notification settings. It creates a new Test Person that has birthday every day.</string>
 
-    <string name="settings_test_notification_worker">Show notifications</string>
-
+    <string name="settings_test_notification_worker">Show worker notifications</string>
 
     <string name="title_notification_history">Notifications</string>
     <string name="delete_notification_history">Delete notification history</string>

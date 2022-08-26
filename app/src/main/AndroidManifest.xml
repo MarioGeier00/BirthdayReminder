@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.mgprogramms.birthdayreminder">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -44,7 +45,6 @@
             android:name=".NotificationHistoryActivity"
             android:label="@string/title_notification_history"
             android:theme="@style/Theme.BirthdayReminder" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"

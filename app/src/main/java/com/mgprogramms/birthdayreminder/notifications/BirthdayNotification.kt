@@ -1,11 +1,11 @@
 package com.mgprogramms.birthdayreminder.notifications
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.mgprogramms.birthdayreminder.CONTACT_ID
@@ -18,19 +18,19 @@ class BirthdayNotification {
     companion object {
         private const val CHANNEL_ID = "BirthdayNotification"
 
-        fun show(context: Context, birthdayData: BirthdayData) {
+        fun create(context: Context, birthdayData: BirthdayData): Notification {
             createNotificationChannel(context)
-
             val title = "Geburtstag"
             val text = "${birthdayData.name} hat heute Geburtstag"
 
             var builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.id.icon)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOngoing(true)
                 .addAction(
-                    R.id.icon,
+                    R.drawable.ic_launcher_foreground,
                     "Done",
                     PendingIntent.getBroadcast(
                         context,
@@ -41,7 +41,6 @@ class BirthdayNotification {
                         PendingIntent.FLAG_IMMUTABLE
                     )
                 )
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
             val whatsAppNumber = Contacts.getPhoneNumberByContactId(context, birthdayData.id)
             if (whatsAppNumber != null) {
@@ -57,30 +56,32 @@ class BirthdayNotification {
                     )
                 )
             }
+            return builder.build()
+        }
 
+        fun show(context: Context, notification: Notification, id: Int) {
             with(NotificationManagerCompat.from(context)) {
                 // notificationId is a unique int for each notification that you must define
-                notify(birthdayData.id, builder.build())
+                notify(id, notification)
             }
         }
+
 
         private fun createNotificationChannel(context: Context) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = context.resources.getString(R.string.settings_birthday_notification_title)
-                val descriptionText =
-                    context.resources.getString(R.string.settings_birthday_notification_description)
-                val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                    description = descriptionText
-                }
-                // Register the channel with the system
-                val notificationManager: NotificationManager =
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-                notificationManager.createNotificationChannel(channel)
+            val name = context.resources.getString(R.string.settings_birthday_notification_title)
+            val descriptionText =
+                context.resources.getString(R.string.settings_birthday_notification_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
             }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            notificationManager.createNotificationChannel(channel)
         }
     }
 }

@@ -16,8 +16,7 @@
     <string name="settings_use_test_person_title">Test Person nutzen</string>
     <string name="settings_use_test_person_description">Aktiviere diese Option, um die Hintergrundbenachrichtigung zu Testen. Es wird eine neue Test Person erstellt, die jeden Tag Geburtstag hat.</string>
 
-    <string name="settings_test_notification_worker">Erinnerung anzeigen</string>
-
+    <string name="settings_test_notification_worker">Erinnerung mit Worker anzeigen</string>
 
     <string name="notification_history">Benachrichtigungsverlauf</string>
     <string name="title_notification_history">Benachrichtigungen</string>

@@ -9,24 +9,29 @@ import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
 import java.time.Duration
 import java.time.LocalTime
 
-class NotificationWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
+class NotificationWorker(val context: Context, workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters) {
     private lateinit var birthdayProvider: BirthdayProvider
 
-    override fun doWork(): Result {
-        birthdayProvider = BirthdayProviderFactory.buildProvider(applicationContext)
+    override suspend fun doWork(): Result {
+
+        birthdayProvider = BirthdayProviderFactory.buildProvider(context)
 
         for (birthday in birthdayProvider.getBirthdays()) {
             if (birthday.hasBirthday()) {
-                if (!RemoveNotificationReceiver.isActivated(applicationContext) ||
+                if (!RemoveNotificationReceiver.isActivated(context) ||
                     !RemoveNotificationReceiver.hasBeenRemovedToday(
-                        applicationContext,
+                        context,
                         birthday.id
                     )
                 ) {
-                    BirthdayNotification.show(applicationContext, birthday)
+                    val notification = BirthdayNotification.create(context, birthday)
+                    BirthdayNotification.show(context, notification, birthday.id)
+//                    setForeground(ForegroundInfo(birthday.id, notification))
                 }
             }
         }
+
+//        Thread.sleep(50000)
 
         return Result.success()
     }
