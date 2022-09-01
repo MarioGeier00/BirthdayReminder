@@ -81,7 +81,7 @@ class Contacts {
                         ContactsContract.CommonDataKinds.Event.TYPE + "=" +
                         ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
 
-            val selectionArgs: Array<String> = arrayOf(
+            val selectionArgs = arrayOf(
                 ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE
             )
 

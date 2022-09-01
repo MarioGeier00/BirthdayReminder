@@ -10,8 +10,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
-import com.mgprogramms.birthdayreminder.*
+import com.mgprogramms.birthdayreminder.CONTACT_ID
+import com.mgprogramms.birthdayreminder.NotificationLogger
+import com.mgprogramms.birthdayreminder.OpenChatReceiver
 import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
+import com.mgprogramms.birthdayreminder.parseDate
 import de.mgprogramms.birthdayreminder.R
 import java.time.Duration
 import java.time.LocalTime

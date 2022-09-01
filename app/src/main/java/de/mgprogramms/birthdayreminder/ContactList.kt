@@ -1,5 +1,6 @@
 package de.mgprogramms.birthdayreminder
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,35 +17,61 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mgprogramms.birthdayreminder.birthday.BirthdayData
-import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayreminder.models.BirthdayContact
+import de.mgprogramms.birthdayreminder.providers.BirthdayContactsProvider
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
+
+@OptIn(ExperimentalPermissionsApi::class)
 @Destination
 @Composable
 fun ContactList() {
     val context = LocalContext.current
 
-    val birthdayProvider = remember { BirthdayProviderFactory.buildProvider(context.applicationContext) }
-    val listState = rememberLazyListState()
-    LazyColumn(
-        state = listState,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        val birthdays = birthdayProvider.getBirthdays()
-        birthdays.sortBy { birthday -> birthday.daysUntilNextBirthday() }
-        items(birthdays) { birthday ->
-            ContactBirthdayItem(birthday)
+    val permissionsState = rememberMultiplePermissionsState(
+        permissions = listOf(Manifest.permission.READ_CONTACTS)
+    )
+    LifecyclePermissionRequest(permissionsState)
+
+    if (permissionsState.allPermissionsGranted) {
+
+        val birthdays = remember {
+            BirthdayContactsProvider(context).getBirthdayContacts()
+                .toMutableList()
+                .also { it.sortBy { birthday -> birthday.daysUntilBirthday } }
         }
+
+        val listState = rememberLazyListState()
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(birthdays) {
+                ContactBirthdayItem(it)
+            }
+        }
+    } else {
+        Text(
+            stringResource(R.string.no_permission_contact_list),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContactBirthdayItem(birthday: BirthdayData) {
+fun ContactBirthdayItem(birthday: BirthdayContact) {
+
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -67,7 +94,7 @@ fun ContactBirthdayItem(birthday: BirthdayData) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val days = birthday.daysUntilNextBirthday()
+                val days = birthday.daysUntilBirthday
                 Text(days.toString(), fontSize = 28.sp, fontWeight = FontWeight.Bold)
                 if (days == 1L) {
                     Text("Tag")
@@ -79,6 +106,14 @@ fun ContactBirthdayItem(birthday: BirthdayData) {
             Text(birthday.name)
         }
         Text(birthday.friendlyBirthdate())
+    }
+}
+
+fun BirthdayContact.friendlyBirthdate(): String {
+    return if (birthDate.yearless) {
+        birthDate.parsedDate.format(DateTimeFormatter.ofPattern("dd. MMMM"))
+    } else {
+        birthDate.parsedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
     }
 }
 

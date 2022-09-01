@@ -7,16 +7,10 @@
 
     <string name="settings_birthday_notification_title">BirthdayReminder notifications</string>
     <string name="settings_birthday_notification_description">BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth</string>
-
-    <string name="settings_removable_notification_title">Removable notifications</string>
-
     <string name="settings_next_notification">Scheduled notification in %1$s hours %2$s minutes</string>
-    <string name="settings_start_service_on_app_start">Start service with app start</string>
 
-    <string name="settings_use_test_person_title">Use test person</string>
-    <string name="settings_use_test_person_description">Activate to test the notification settings. It creates a new Test Person that has birthday every day.</string>
+    <string name="settings_test_notification_alarm">Set alarm notification</string>
 
-    <string name="settings_test_notification_worker">Show worker notifications</string>
 
     <string name="title_notification_history">Notifications</string>
     <string name="delete_notification_history">Delete notification history</string>
@@ -27,4 +21,6 @@
     <string name="days">days</string>
     <string name="day">day</string>
     <string name="until_birthday_of">until birthday of</string>
+    <string name="birthday_reminder_notification_name">Birthday Reminder</string>
+    <string name="no_permission_contact_list">No access for contact list granted.</string>
 </resources>

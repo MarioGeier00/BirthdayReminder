@@ -6,17 +6,11 @@
 
 
     <string name="settings_birthday_notification_title">BirthdayReminder Benachrichtigungen</string>
-    <string name="settings_birthday_notification_description">Birthdayreminder informiert dich über aktuelle Geburtstage.Dazu wird deine Kontaktliste genutzt.</string>
-
+    <string name="settings_birthday_notification_description">Birthdayreminder informiert dich über aktuelle Geburtstage. Dazu wird deine Kontaktliste genutzt.</string>
     <string name="settings_next_notification">Nächste Benachrichtigung in %1$s h %2$s min</string>
 
-    <string name="settings_removable_notification_title">Entfernbare Benachrichtiung</string>
-    <string name="settings_start_service_on_app_start">Hintergrundservice beim Starten der App aktivieren</string>
+    <string name="settings_test_notification_alarm">Erinnerung mit AlarmManager anzeigen</string>
 
-    <string name="settings_use_test_person_title">Test Person nutzen</string>
-    <string name="settings_use_test_person_description">Aktiviere diese Option, um die Hintergrundbenachrichtigung zu Testen. Es wird eine neue Test Person erstellt, die jeden Tag Geburtstag hat.</string>
-
-    <string name="settings_test_notification_worker">Erinnerung mit Worker anzeigen</string>
 
     <string name="notification_history">Benachrichtigungsverlauf</string>
     <string name="title_notification_history">Benachrichtigungen</string>
@@ -27,4 +21,6 @@
     <string name="days">Tage</string>
     <string name="day">Tag</string>
     <string name="until_birthday_of">bis Geburtstag von</string>
+    <string name="birthday_reminder_notification_name">Geburtstag Erinnerung</string>
+    <string name="no_permission_contact_list">Zugriff auf deine Kontaktliste wurde abgelehnt.</string>
 </resources>

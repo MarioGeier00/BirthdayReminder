@@ -20,13 +20,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.mgprogramms.birthdayreminder.birthday.BirthdayProviderFactory
-import com.mgprogramms.birthdayreminder.notifications.NotificationWorker
-import com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayreminder.models.toBirthdayContact
+import de.mgprogramms.birthdayreminder.providers.AlarmProvider
+import de.mgprogramms.birthdayreminder.providers.ContactsProvider
+import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
 import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
+import java.time.Duration
+import java.time.LocalTime
 
 
 @Destination
@@ -34,14 +35,10 @@ import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
 fun Settings() {
     val context = LocalContext.current
 
-    val showNotificationState = remember { mutableStateOf(NotificationWorker.isActivated(context)) }
-    val removeNotificationState =
-        remember { mutableStateOf(RemoveNotificationReceiver.isActivated(context)) }
+    val alarmProvider = remember { AlarmProvider(context) }
 
-    val serviceOnAppStartState =
-        remember { mutableStateOf(NotificationWorker.enqueueAtAppStartup(context)) }
-    val useTestPersonState =
-        remember { mutableStateOf(BirthdayProviderFactory.shouldUseTestPerson(context)) }
+
+    val showNotificationState = remember { mutableStateOf(alarmProvider.hasAnyAlarms()) }
 
     Column(
         Modifier.fillMaxSize(),
@@ -50,19 +47,34 @@ fun Settings() {
         SettingsSwitch(
             showNotificationState,
             {
-                NotificationWorker.updateState(context, it)
-                showNotificationState.value = NotificationWorker.isActivated(context)
+                // TODO: Add notification permission request
+                with(AlarmProvider(BirthdayReminderApp.context)) {
+                    if (alarmProvider.hasAnyAlarms()) {
+                        removeBirthdayAlarms()
+                    } else {
+                        NextBirthdayProvider(context).getNextBirthdays()
+                            .forEach {
+                                setAlarmForBirthday(it)
+                            }
+                    }
+                }
+                showNotificationState.value = alarmProvider.hasAnyAlarms()
             },
             stringResource(R.string.settings_birthday_notification_title),
             stringResource(R.string.settings_birthday_notification_description),
         )
 
-        val durationUntilNextNotification = remember { NotificationWorker.getDurationUntilNextNotification() }
-
-        val minutes = if (durationUntilNextNotification.toHours() > 0) {
-            durationUntilNextNotification.toMinutes() % (durationUntilNextNotification.toHours() * 60)
+        val nextBirthday = remember { NextBirthdayProvider(context).getNextBirthdaysExceptToday().first() }
+        val duration = remember {
+            Duration.between(
+                LocalTime.now(),
+                LocalTime.of(0, 0)
+            ).plusHours(nextBirthday.daysUntilBirthday * 24)
+        }
+        val minutes = if (duration.toHours() > 0) {
+            duration.toMinutes() % (duration.toHours() * 60)
         } else {
-            durationUntilNextNotification.toMinutes()
+            duration.toMinutes()
         }
         Row(Modifier.padding(22.dp, 16.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Outlined.Info, "info")
@@ -70,41 +82,17 @@ fun Settings() {
             Text(
                 String.format(
                     stringResource(R.string.settings_next_notification),
-                    durationUntilNextNotification.toHours(),
+                    duration.toHours(),
                     minutes
                 ),
             )
         }
 
-        SettingsSwitch(
-            removeNotificationState,
-            {
-                RemoveNotificationReceiver.setActivatedState(context, it)
-                removeNotificationState.value = RemoveNotificationReceiver.isActivated(context)
-            },
-            stringResource(R.string.settings_removable_notification_title),
-        )
-        SettingsSwitch(
-            serviceOnAppStartState,
-            {
-                NotificationWorker.setEnqueueAtAppStartup(context, it)
-                serviceOnAppStartState.value = NotificationWorker.enqueueAtAppStartup(context)
-            },
-            stringResource(R.string.settings_start_service_on_app_start),
-        )
-        SettingsSwitch(
-            useTestPersonState,
-            {
-                BirthdayProviderFactory.setUseTestPerson(context, it)
-                useTestPersonState.value = BirthdayProviderFactory.shouldUseTestPerson(context)
-            },
-            stringResource(R.string.settings_use_test_person_title),
-            stringResource(R.string.settings_use_test_person_description),
-        )
         Spacer(Modifier.height(18.dp))
-        Text(stringResource(R.string.settings_test_notification_worker), Modifier.clickable {
-            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>().build()
-            WorkManager.getInstance(context).enqueue(workRequest)
+        Text(stringResource(R.string.settings_test_notification_alarm), Modifier.clickable {
+            AlarmProvider(context).setAlarmForBirthday(
+                ContactsProvider(context).getContacts().first().toBirthdayContact()
+            )
         }.padding(22.dp, 16.dp).fillMaxWidth())
 
         Text(stringResource(R.string.notification_history), Modifier.clickable {

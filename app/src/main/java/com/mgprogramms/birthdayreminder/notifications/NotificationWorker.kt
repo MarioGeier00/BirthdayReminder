@@ -24,8 +24,8 @@ class NotificationWorker(val context: Context, workerParameters: WorkerParameter
                         birthday.id
                     )
                 ) {
-                    val notification = BirthdayNotification.create(context, birthday)
-                    BirthdayNotification.show(context, notification, birthday.id)
+//                    val notification = BirthdayNotification.create(context, birthday)
+//                    BirthdayNotification.show(context, notification, birthday.id)
 //                    setForeground(ForegroundInfo(birthday.id, notification))
                 }
             }

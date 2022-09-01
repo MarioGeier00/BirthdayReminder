@@ -10,15 +10,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.mgprogramms.birthdayreminder.CONTACT_ID
 import com.mgprogramms.birthdayreminder.OpenChatReceiver
-import de.mgprogramms.birthdayreminder.R
-import com.mgprogramms.birthdayreminder.birthday.BirthdayData
 import com.mgprogramms.birthdayreminder.birthday.Contacts
+import de.mgprogramms.birthdayreminder.R
+import de.mgprogramms.birthdayreminder.models.BirthdayContact
 
 class BirthdayNotification {
     companion object {
         private const val CHANNEL_ID = "BirthdayNotification"
 
-        fun create(context: Context, birthdayData: BirthdayData): Notification {
+        fun create(context: Context, birthdayData: BirthdayContact): Notification {
             createNotificationChannel(context)
             val title = "Geburtstag"
             val text = "${birthdayData.name} hat heute Geburtstag"
