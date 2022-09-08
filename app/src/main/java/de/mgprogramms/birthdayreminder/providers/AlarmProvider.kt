@@ -31,6 +31,7 @@ class AlarmProvider(val context: Context) {
 
         val intent = Intent(context, AlarmReceiver::class.java).also {
             it.putExtra(AlarmReceiverContactIdKey, birthdayContact.id)
+            it.flags = Intent.FLAG_RECEIVER_FOREGROUND
         }
 
         val pendingIntent =
@@ -41,7 +42,7 @@ class AlarmProvider(val context: Context) {
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.timeInMillis, pendingIntent)
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.timeInMillis, pendingIntent)
 
         val preference = intPreferencesKey(birthdayContact.id.toString())
         runBlocking {

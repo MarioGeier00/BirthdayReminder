@@ -48,7 +48,7 @@ fun Settings() {
             showNotificationState,
             {
                 // TODO: Add notification permission request
-                with(AlarmProvider(BirthdayReminderApp.context)) {
+                with(AlarmProvider(context)) {
                     if (alarmProvider.hasAnyAlarms()) {
                         removeBirthdayAlarms()
                     } else {
