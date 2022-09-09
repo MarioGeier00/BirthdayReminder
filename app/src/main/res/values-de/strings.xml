@@ -24,4 +24,8 @@
     <string name="until_birthday_of">bis Geburtstag von</string>
     <string name="birthday_reminder_notification_name">Geburtstag Erinnerung</string>
     <string name="no_permission_contact_list">Zugriff auf deine Kontaktliste wurde abgelehnt.</string>
+
+
+    <string name="toast_whatsapp_not_installed">WhatsApp ist nicht installiert</string>
+    <string name="birthday_message">Hallo %1$s! Ich wünsche dir alles Gute zu deinem Geburtstag!</string>
 </resources>

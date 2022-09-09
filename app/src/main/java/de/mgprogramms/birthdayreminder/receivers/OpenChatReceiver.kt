@@ -9,6 +9,7 @@ import android.provider.SimPhonebookContract.SimRecords.PHONE_NUMBER
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
+import de.mgprogramms.birthdayreminder.R
 import de.mgprogramms.birthdayreminder.providers.ContactsProvider
 import java.net.URLEncoder
 
@@ -23,7 +24,7 @@ class OpenChatReceiver : BroadcastReceiver() {
                 val contact = intent.extras?.getInt(CONTACT_ID)
                     ?.let { ContactsProvider(context).getContactById(it) }
 
-                val message = "Hallo ${contact?.name}! Ich wünsche dir alles Gute zu deinem Geburtstag!"
+                val message = context.getString(R.string.birthday_message, contact?.name)
                 val url = "https://api.whatsapp.com/send?phone=$phoneNumber&text=${URLEncoder.encode(message, "UTF-8")}"
                 try {
                     context.packageManager.getPackageInfo(
@@ -38,11 +39,12 @@ class OpenChatReceiver : BroadcastReceiver() {
                 } catch (e: PackageManager.NameNotFoundException) {
                     Toast.makeText(
                         context,
-                        "Whatsapp is not installed on your phone.",
+                        context.getString(R.string.toast_whatsapp_not_installed),
                         Toast.LENGTH_SHORT
                     ).show()
                     e.printStackTrace()
                 }
             }
     }
+
 }
