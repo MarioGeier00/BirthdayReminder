@@ -28,4 +28,8 @@
 
     <string name="toast_whatsapp_not_installed">WhatsApp is not installed</string>
     <string name="birthday_message">Hello %1$s! I wish you a happy birthday!</string>
+    <string name="notification_sent_message">Send message to %1$s</string>
+    <string name="notification_done">Done</string>
+    <string name="birthday_notification_title">Birthday</string>
+    <string name="birthday_notification_message">%1$s has birthday today</string>
 </resources>

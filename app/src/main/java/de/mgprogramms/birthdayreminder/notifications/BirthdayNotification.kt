@@ -19,8 +19,8 @@ const val BirthdayNotificationChannelId = "birthday_reminder_notification"
 
 
 class BirthdayNotification(val context: Context, val birthdayData: BirthdayContact) {
-    val title = "Geburtstag"
-    val text = "${birthdayData.name} hat heute Geburtstag"
+    val title = context.getString(R.string.birthday_notification_title)
+    val text = context.getString(R.string.birthday_notification_message, birthdayData.name)
 
     val builder = NotificationCompat.Builder(context, BirthdayNotificationChannelId)
         .setSmallIcon(R.drawable.ic_cake)
@@ -30,7 +30,7 @@ class BirthdayNotification(val context: Context, val birthdayData: BirthdayConta
         .setOngoing(true)
         .addAction(
             R.drawable.ic_check,
-            "Done",
+            context.getString(R.string.notification_done),
             PendingIntent.getBroadcast(
                 context,
                 -birthdayData.id,
@@ -48,20 +48,21 @@ class BirthdayNotification(val context: Context, val birthdayData: BirthdayConta
             .firstOrNull()
             ?.let { PhoneNumberProvider(context).getPhoneNumbersByRawContactId(birthdayData.id, it) }
             ?.firstOrNull()
-            ?.let {
+            ?.let { whatsAppNumber ->
                 builder.addAction(
-                    R.drawable.ic_send, "Send message to $it",
+                    R.drawable.ic_send,
+                    context.getString(R.string.notification_sent_message, whatsAppNumber),
                     PendingIntent.getBroadcast(
                         context,
                         birthdayData.id,
                         Intent(context, OpenChatReceiver::class.java).apply {
                             putExtra(CONTACT_ID, birthdayData.id)
-                            putExtra(PHONE_NUMBER, it)
+                            putExtra(PHONE_NUMBER, whatsAppNumber)
                         },
                         PendingIntent.FLAG_IMMUTABLE
                     )
                 ).build()
-            }?: builder.build()
+            } ?: builder.build()
     }
 
     fun show(context: Context, notification: Notification, id: Int) {
