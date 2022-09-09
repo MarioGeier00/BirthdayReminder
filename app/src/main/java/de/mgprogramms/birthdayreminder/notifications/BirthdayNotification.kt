@@ -23,13 +23,13 @@ class BirthdayNotification(val context: Context, val birthdayData: BirthdayConta
     val text = "${birthdayData.name} hat heute Geburtstag"
 
     val builder = NotificationCompat.Builder(context, BirthdayNotificationChannelId)
-        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setSmallIcon(R.drawable.ic_cake)
         .setContentTitle(title)
         .setContentText(text)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setOngoing(true)
         .addAction(
-            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_check,
             "Done",
             PendingIntent.getBroadcast(
                 context,
@@ -50,7 +50,7 @@ class BirthdayNotification(val context: Context, val birthdayData: BirthdayConta
             ?.firstOrNull()
             ?.let {
                 builder.addAction(
-                    R.id.icon, "Send message to $it",
+                    R.drawable.ic_send, "Send message to $it",
                     PendingIntent.getBroadcast(
                         context,
                         birthdayData.id,
