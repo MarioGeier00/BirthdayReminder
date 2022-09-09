@@ -17,8 +17,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.navigation.navigateTo
-import de.mgprogramms.birthdayreminder.destinations.*
+import com.ramcosta.composedestinations.navigation.navigate
+import de.mgprogramms.birthdayreminder.destinations.ContactListDestination
+import de.mgprogramms.birthdayreminder.destinations.DirectionDestination
+import de.mgprogramms.birthdayreminder.destinations.HomeDestination
+import de.mgprogramms.birthdayreminder.destinations.SettingsDestination
 import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,8 +60,8 @@ enum class BottomBarDestination(
 
 @Composable
 fun MainNavigationBar(navController: NavController) {
-    val currentDestination: Destination? = navController.currentBackStackEntryAsState()
-        .value?.navDestination
+    val currentDestination = navController.currentBackStackEntryAsState()
+        .value?.appDestination()
 
     NavigationBar {
         BottomBarDestination.values().forEach { destination ->
@@ -67,7 +70,7 @@ fun MainNavigationBar(navController: NavController) {
                 label = { Text(stringResource(destination.label)) },
                 selected = currentDestination == destination.direction,
                 onClick = {
-                    navController.navigateTo(destination.direction)
+                    navController.navigate(destination.direction)
                 },
             )
         }
