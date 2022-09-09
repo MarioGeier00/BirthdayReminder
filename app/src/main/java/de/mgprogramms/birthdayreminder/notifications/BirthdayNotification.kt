@@ -33,11 +33,11 @@ class BirthdayNotification(val context: Context, val birthdayData: BirthdayConta
             "Done",
             PendingIntent.getBroadcast(
                 context,
-                birthdayData.id,
+                -birthdayData.id,
                 Intent(context, RemoveNotificationReceiver::class.java).apply {
                     putExtra(RemoveNotificationReceiver.NOTIFICATION_ID, birthdayData.id)
                 },
-                PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_MUTABLE
             )
         )
 

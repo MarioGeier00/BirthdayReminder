@@ -100,7 +100,7 @@ fun Settings() {
                 context,
                 ContactsProvider(context).getContacts().find { it.name == "Mama" }!!.toBirthdayContact()
             )
-            notification.show(context, notification.create(), 111)
+            notification.show(context, notification.create(), notification.birthdayData.id)
         }.padding(22.dp, 16.dp).fillMaxWidth())
 
         Text(stringResource(R.string.notification_history), Modifier.clickable {
