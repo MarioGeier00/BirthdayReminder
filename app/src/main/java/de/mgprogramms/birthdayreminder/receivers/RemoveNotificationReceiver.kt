@@ -1,29 +1,28 @@
-package com.mgprogramms.birthdayreminder.notifications
+package de.mgprogramms.birthdayreminder.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import java.time.LocalDate
 
 
 class RemoveNotificationReceiver : BroadcastReceiver() {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationId = intent.extras?.get(NOTIFICATION_ID) as Int
+        intent.extras?.getInt(NOTIFICATION_ID)
+            ?.let { notificationId ->
+                with(NotificationManagerCompat.from(context)) {
+                    cancel(notificationId)
+                }
 
-        with(NotificationManagerCompat.from(context)) {
-            cancel(notificationId)
-        }
-
-        with(getSharedPref(context).edit()) {
-            putString(notificationId.toString(), LocalDate.now().toString())
-            apply()
-        }
+                with(getSharedPref(context).edit()) {
+                    putString(notificationId.toString(), LocalDate.now().toString())
+                    apply()
+                }
+            }
     }
 
     companion object {

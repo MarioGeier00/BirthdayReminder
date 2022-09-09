@@ -34,4 +34,24 @@ class ContactsProvider(val context: Context) {
 
         return contacts
     }
+
+    fun getContactById(contactId: Int): Contact? {
+        val cursor = context.contentResolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            ContactProjection,
+            "$where AND ${ContactsContract.CommonDataKinds.Event.CONTACT_ID} = ?",
+            selectionArgs.plus(contactId.toString()),
+            null
+        )!!
+
+        val result = if (cursor.moveToFirst()) {
+            cursor.parseContact()
+        } else {
+            null
+        }
+        cursor.close()
+
+        return result
+    }
+
 }

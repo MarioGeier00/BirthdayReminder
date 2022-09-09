@@ -15,11 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mgprogramms.birthdayreminder.NotificationLogger
 import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
 
 class NotificationHistoryActivity : ComponentActivity() {
@@ -44,8 +42,7 @@ class NotificationHistoryActivity : ComponentActivity() {
 
 @Composable
 fun NotificationHistory() {
-    val context = LocalContext.current
-    val notificationList = remember { NotificationLogger.getNotifications(context.applicationContext).toList() }
+    val notificationList = remember { emptyList<String>() }
 
     LazyRow(Modifier.fillMaxWidth()) {
         items(notificationList) { notification ->

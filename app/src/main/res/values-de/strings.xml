@@ -10,6 +10,7 @@
     <string name="settings_next_notification">Nächste Benachrichtigung in %1$s h %2$s min</string>
 
     <string name="settings_test_notification_alarm">Erinnerung mit AlarmManager anzeigen</string>
+    <string name="settings_test_notification_direct">Sofortige Erinnerung anzeigen</string>
 
 
     <string name="notification_history">Benachrichtigungsverlauf</string>

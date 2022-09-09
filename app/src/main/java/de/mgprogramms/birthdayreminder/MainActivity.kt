@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.mgprogramms.birthdayreminder.notifications.NotificationWorker
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigateTo
 import de.mgprogramms.birthdayreminder.destinations.*
@@ -26,12 +25,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (NotificationWorker.enqueueAtAppStartup(applicationContext)) {
-            // enqueueSelf worker in order to activate the service right after
-            // the user has installed and opened the app
-            NotificationWorker.enqueueSelf(applicationContext, false);
-        }
 
         setContent {
             BirthdayReminderTheme {

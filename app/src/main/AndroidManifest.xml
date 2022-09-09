@@ -21,27 +21,6 @@
         android:theme="@style/Theme.BirthdayReminder">
 
         <receiver
-            android:name="com.mgprogramms.birthdayreminder.OpenChatReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
-            android:name="com.mgprogramms.birthdayreminder.notifications.RemoveNotificationReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
-            android:name="com.mgprogramms.birthdayreminder.BootReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-            <intent-filter android:directBootAware="true">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="android.intent.action.REBOOT" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
             android:name=".receivers.AlarmReceiver"
             android:enabled="true"
             android:exported="true">
@@ -50,14 +29,25 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".receivers.RemoveNotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.OpenChatReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+
         <activity
             android:name=".NotificationHistoryActivity"
             android:label="@string/title_notification_history"
             android:theme="@style/Theme.BirthdayReminder" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.BirthdayReminder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

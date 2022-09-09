@@ -110,7 +110,7 @@ fun ContactBirthdayItem(birthday: BirthdayContact) {
 }
 
 fun BirthdayContact.friendlyBirthdate(): String {
-    return if (birthDate.yearless) {
+    return if (birthDate.noYear) {
         birthDate.parsedDate.format(DateTimeFormatter.ofPattern("dd. MMMM"))
     } else {
         birthDate.parsedDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))

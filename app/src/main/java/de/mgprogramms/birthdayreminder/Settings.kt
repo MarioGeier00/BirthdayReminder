@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import de.mgprogramms.birthdayreminder.models.toBirthdayContact
+import de.mgprogramms.birthdayreminder.notifications.BirthdayNotification
 import de.mgprogramms.birthdayreminder.providers.AlarmProvider
 import de.mgprogramms.birthdayreminder.providers.ContactsProvider
 import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
@@ -93,6 +94,13 @@ fun Settings() {
             AlarmProvider(context).setAlarmForBirthday(
                 ContactsProvider(context).getContacts().first().toBirthdayContact()
             )
+        }.padding(22.dp, 16.dp).fillMaxWidth())
+        Text(stringResource(R.string.settings_test_notification_direct), Modifier.clickable {
+            val notification = BirthdayNotification(
+                context,
+                ContactsProvider(context).getContacts().find { it.name == "Mama" }!!.toBirthdayContact()
+            )
+            notification.show(context, notification.create(), 111)
         }.padding(22.dp, 16.dp).fillMaxWidth())
 
         Text(stringResource(R.string.notification_history), Modifier.clickable {

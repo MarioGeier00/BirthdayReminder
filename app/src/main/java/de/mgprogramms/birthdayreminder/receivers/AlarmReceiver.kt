@@ -38,18 +38,12 @@ class AlarmReceiver : BroadcastReceiver() {
             }
 
             // get contact id from scheduled birthday alarm
-            val contact = intent.extras?.getInt(AlarmReceiverContactIdKey)
-                ?.let { contactId ->
-                    // TODO: Implement method to find contacts by contactId with SQL command
-                    ContactsProvider(context).getContacts()
-                        .find { it.id == contactId }
+            intent.extras?.getInt(AlarmReceiverContactIdKey)
+                ?.let { ContactsProvider(context).getContactById(it) }
+                ?.also {
+                    val notification = BirthdayNotification(context, it.toBirthdayContact())
+                    notification.show(context, notification.create(), it.id)
                 }
-
-            if (contact != null) {
-                val notification = BirthdayNotification(context, contact.toBirthdayContact())
-                notification.show(context, notification.create(), contact.id)
-            }
-
         }
     }
 }
