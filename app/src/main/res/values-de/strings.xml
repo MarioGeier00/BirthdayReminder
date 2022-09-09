@@ -32,4 +32,5 @@
     <string name="notification_done">Erledigt</string>
     <string name="birthday_notification_title">Geburtstag</string>
     <string name="birthday_notification_message">%1$s hat heute Geburtstag</string>
+    <string name="no_permission_notification">Berechtigung für Benachrichtigungen wurde abgelehnt</string>
 </resources>
