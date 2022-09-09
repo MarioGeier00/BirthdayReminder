@@ -19,23 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
-import de.mgprogramms.birthdayreminder.models.BirthdayContact
 import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
-
-
-fun getNextBirthday(birthdays: List<BirthdayContact>): BirthdayContact? {
-    if (birthdays.isNotEmpty()) {
-        var closestBirthday = birthdays.first()
-        for (birthday in birthdays) {
-            if (birthday.daysUntilBirthday < closestBirthday.daysUntilBirthday) {
-                closestBirthday = birthday
-            }
-        }
-        return closestBirthday
-    }
-
-    return null
-}
 
 
 @OptIn(ExperimentalPermissionsApi::class)
