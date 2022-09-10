@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import de.mgprogramms.birthdayreminder.destinations.ContactDetailDestination
 import de.mgprogramms.birthdayreminder.models.BirthdayContact
 import de.mgprogramms.birthdayreminder.providers.BirthdayContactsProvider
 import java.time.format.DateTimeFormatter
@@ -34,7 +36,7 @@ import java.time.format.FormatStyle
 @OptIn(ExperimentalPermissionsApi::class)
 @Destination
 @Composable
-fun ContactList() {
+fun ContactList(navController: DestinationsNavigator) {
     val context = LocalContext.current
 
     val permissionsState = rememberMultiplePermissionsState(
@@ -56,7 +58,7 @@ fun ContactList() {
             modifier = Modifier.fillMaxSize()
         ) {
             items(birthdays) {
-                ContactBirthdayItem(it)
+                ContactBirthdayItem(it, navController)
             }
         }
     } else {
@@ -70,7 +72,7 @@ fun ContactList() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ContactBirthdayItem(birthday: BirthdayContact) {
+fun ContactBirthdayItem(birthday: BirthdayContact, navController: DestinationsNavigator) {
 
     val context = LocalContext.current
     Row(
@@ -78,7 +80,7 @@ fun ContactBirthdayItem(birthday: BirthdayContact) {
             .fillMaxSize()
             .combinedClickable(
                 onClick = {
-                    showContactDetail(birthday.id, context)
+                    navController.navigate(ContactDetailDestination(birthday.id))
                 },
                 onLongClick = {
                     showEditContact(birthday.id, context)
