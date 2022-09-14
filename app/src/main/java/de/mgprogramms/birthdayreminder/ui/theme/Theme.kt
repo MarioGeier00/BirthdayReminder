@@ -1,6 +1,5 @@
 package de.mgprogramms.birthdayreminder.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -68,10 +67,8 @@ private val LightColorPalette = lightColorScheme(
 @Composable
 fun BirthdayReminderTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && darkTheme -> dynamicDarkColorScheme(LocalContext.current)
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !darkTheme -> dynamicLightColorScheme(LocalContext.current)
-        darkTheme -> DarkColorPalette
-        else -> LightColorPalette
+        darkTheme -> dynamicDarkColorScheme(LocalContext.current)
+        else -> dynamicLightColorScheme(LocalContext.current)
     }
 
     MaterialTheme(
