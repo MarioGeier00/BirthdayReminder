@@ -131,37 +131,31 @@ fun ContactDetail(
         var textState by remember { mutableStateOf(TextFieldValue()) }
         var openDialog by remember { mutableStateOf(false) }
         ExtendedFloatingActionButton(
-            onClick = {
-                openDialog = true
-            },
+            onClick = { openDialog = true },
             icon = {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "Add"
-                )
+                Icon(Icons.Filled.Add, contentDescription = "Add")
             },
             text = { Text("Present") },
             modifier = Modifier.align(Alignment.End),
-
-            )
-        Spacer(Modifier.height(56.dp))
+        )
 
         if (openDialog) {
-            AlertDialog(onDismissRequest = {},
+            AlertDialog(
+                onDismissRequest = {
+                    openDialog = false
+                },
                 title = {
                     Text("Neue Geschenk-Idee")
                 },
                 text = {
-                    TextField(
-                        textState,
-                        { textState = it }
-                    )
+                    TextField(textState, { textState = it })
                 },
                 confirmButton = {
                     Button({
                         presents.add(Present(textState.text, false))
                         context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
                         openDialog = false
+                        textState = TextFieldValue()
                     }) {
                         Text("Hinzufügen")
                     }
