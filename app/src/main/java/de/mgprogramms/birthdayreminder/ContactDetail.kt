@@ -64,11 +64,11 @@ fun ContactDetail(
 ) {
     val context = LocalContext.current
 
-    Column(Modifier.fillMaxSize().padding(22.dp, 18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(Modifier.fillMaxSize().padding(22.dp, 18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(contact.name, fontSize = 48.sp)
+        Spacer(Modifier.height(14.dp))
 
         BirthdayDetailInfo(contact)
-        Spacer(Modifier.height(24.dp))
 
         Text("Geschenk-Ideen")
 
