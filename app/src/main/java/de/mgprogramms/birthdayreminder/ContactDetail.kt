@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,8 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import de.mgprogramms.birthdayreminder.models.BirthdayContact
+import de.mgprogramms.birthdayreminder.models.Contact
 import de.mgprogramms.birthdayreminder.models.toBirthdayContact
-import de.mgprogramms.birthdayreminder.providers.BirthDate
 import de.mgprogramms.birthdayreminder.providers.ContactsProvider
 import de.mgprogramms.birthdayreminder.providers.dataStore
 import kotlinx.coroutines.flow.first
@@ -63,14 +64,13 @@ fun ContactDetail(
 ) {
     val context = LocalContext.current
 
-    Column(Modifier.fillMaxSize().padding(22.dp, 18.dp)) {
+    Column(Modifier.fillMaxSize().padding(22.dp, 18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(contact.name, fontSize = 48.sp)
-        Spacer(Modifier.height(8.dp))
-        Text("Geburtstag in ${contact.daysUntilBirthday} Tagen")
 
+        BirthdayDetailInfo(contact)
         Spacer(Modifier.height(24.dp))
+
         Text("Geschenk-Ideen")
-        Spacer(Modifier.height(8.dp))
 
         val presentsPreference = remember { stringSetPreferencesKey("presents_${contact.id}") }
         val presents = remember {
@@ -88,7 +88,7 @@ fun ContactDetail(
 
         val scrollState = rememberLazyListState()
 
-        LazyColumn(state = scrollState, modifier = Modifier.fillMaxHeight(0.8f)) {
+        LazyColumn(state = scrollState, modifier = Modifier.weight(1F, true)) {
             items(presents) { present ->
                 ListItem({
                     Text(present.name)
@@ -103,9 +103,6 @@ fun ContactDetail(
                     presents.remove(present)
                     context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
                 }))
-            }
-            item {
-                ListItem({ Text("Erledigt") })
             }
             items(donePresents) { present ->
                 ListItem({
@@ -132,9 +129,7 @@ fun ContactDetail(
         var openDialog by remember { mutableStateOf(false) }
         ExtendedFloatingActionButton(
             onClick = { openDialog = true },
-            icon = {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
-            },
+            icon = { Icon(Icons.Filled.Add, contentDescription = "Add") },
             text = { Text("Present") },
             modifier = Modifier.align(Alignment.End),
         )
@@ -160,6 +155,25 @@ fun ContactDetail(
                         Text("Hinzufügen")
                     }
                 })
+        }
+    }
+}
+
+@Composable
+fun BirthdayDetailInfo(contact: BirthdayContact) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(painterResource(R.drawable.ic_cake), "Geburtstag")
+            Text("${contact.daysUntilBirthday} Tage")
+        }
+
+        if (!contact.birthDate.noYear) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(painterResource(R.drawable.ic_schedule), "Alter")
+                Spacer(Modifier.size(4.dp))
+                val age = remember { contact.birthDate.parsedDate.until(LocalDate.now()) }
+                Text("${age.years} Jahre alt")
+            }
         }
     }
 }
@@ -191,11 +205,7 @@ fun Context.storePresents(
 @Composable
 fun ContactDetailPreview() {
     ContactDetail(
-        BirthdayContact(
-            20,
-            BirthDate(LocalDate.now(), false),
-            20,
-            "Test Name"
-        )
+        Contact(11111, "1992-05-19", "Peter Test")
+            .toBirthdayContact()
     )
 }
