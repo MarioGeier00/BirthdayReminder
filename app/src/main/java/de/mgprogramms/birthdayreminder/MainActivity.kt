@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
                         DestinationsNavHost(
                             navGraph = NavGraphs.root,
                             navController = navController,
+                            modifier = Modifier.padding(it),
                         )
                     }
                 }
@@ -85,7 +88,11 @@ fun MainActivityPreview() {
     BirthdayReminderTheme {
         val navController = rememberNavController()
         Scaffold(bottomBar = { MainNavigationBar(navController) }) {
-            DestinationsNavHost(navGraph = NavGraphs.root, navController = navController)
+            DestinationsNavHost(
+                navGraph = NavGraphs.root,
+                navController = navController,
+                modifier = Modifier.padding(it),
+            )
         }
     }
 }
