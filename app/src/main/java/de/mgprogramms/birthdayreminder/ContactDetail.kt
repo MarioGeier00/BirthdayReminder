@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
@@ -24,11 +25,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayreminder.models.BirthdayContact
 import de.mgprogramms.birthdayreminder.models.toBirthdayContact
+import de.mgprogramms.birthdayreminder.providers.BirthDate
 import de.mgprogramms.birthdayreminder.providers.ContactsProvider
 import de.mgprogramms.birthdayreminder.providers.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contact_details")
 
@@ -37,7 +41,6 @@ data class Present(
     var done: Boolean,
 )
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun ContactDetail(
@@ -49,110 +52,120 @@ fun ContactDetail(
     }
 
     if (contact != null) {
-        Column(Modifier.fillMaxSize().padding(22.dp, 18.dp)) {
-            Text(contact.name, fontSize = 48.sp)
-            Spacer(Modifier.height(8.dp))
-            Text("Geburtstag in ${contact.daysUntilBirthday} Tagen")
+        ContactDetail(contact)
+    }
+}
 
-            Spacer(Modifier.height(24.dp))
-            Text("Geschenk-Ideen")
-            Spacer(Modifier.height(8.dp))
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun ContactDetail(
+    contact: BirthdayContact
+) {
+    val context = LocalContext.current
 
-            val presentsPreference = remember { stringSetPreferencesKey("presents_$contactId") }
-            val presents = remember {
-                runBlocking {
-                    context.dataStore.data.first()[presentsPreference] ?: setOf()
-                }.map { Present(it, false) }.toMutableList()
-            }
+    Column(Modifier.fillMaxSize().padding(22.dp, 18.dp)) {
+        Text(contact.name, fontSize = 48.sp)
+        Spacer(Modifier.height(8.dp))
+        Text("Geburtstag in ${contact.daysUntilBirthday} Tagen")
 
-            val donePresentsPreference = remember { stringSetPreferencesKey("presents_done_$contactId") }
-            val donePresents = remember {
-                runBlocking {
-                    context.dataStore.data.first()[donePresentsPreference] ?: setOf()
-                }.map { Present(it, true) }.toMutableList()
-            }
+        Spacer(Modifier.height(24.dp))
+        Text("Geschenk-Ideen")
+        Spacer(Modifier.height(8.dp))
 
-            val scrollState = rememberLazyListState()
+        val presentsPreference = remember { stringSetPreferencesKey("presents_${contact.id}") }
+        val presents = remember {
+            runBlocking {
+                context.dataStore.data.first()[presentsPreference] ?: setOf()
+            }.map { Present(it, false) }.toMutableList()
+        }
 
-            LazyColumn(state = scrollState, modifier = Modifier.fillMaxHeight(0.8f)) {
-                items(presents) { present ->
-                    ListItem({
-                        Text(present.name)
-                    }, leadingContent = {
-                        var state by remember { mutableStateOf(present.done) }
-                        Checkbox(state, {
-                            state = !state
-                            present.done = state
-                            context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                        })
-                    }, modifier = Modifier.fillMaxSize().combinedClickable(onClick = {}, onLongClick = {
-                        presents.remove(present)
+        val donePresentsPreference = remember { stringSetPreferencesKey("presents_done_${contact.id}") }
+        val donePresents = remember {
+            runBlocking {
+                context.dataStore.data.first()[donePresentsPreference] ?: setOf()
+            }.map { Present(it, true) }.toMutableList()
+        }
+
+        val scrollState = rememberLazyListState()
+
+        LazyColumn(state = scrollState, modifier = Modifier.fillMaxHeight(0.8f)) {
+            items(presents) { present ->
+                ListItem({
+                    Text(present.name)
+                }, leadingContent = {
+                    var state by remember { mutableStateOf(present.done) }
+                    Checkbox(state, {
+                        state = !state
+                        present.done = state
                         context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                    }))
-                }
-                item {
-                    ListItem({ Text("Erledigt") })
-                }
-                items(donePresents) { present ->
-                    ListItem({
-                        Text(present.name)
-                    }, leadingContent = {
-                        var state by remember { mutableStateOf(present.done) }
-                        Checkbox(state, {
-                            state = !state
-                            present.done = state
-                            context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                        })
-                    }, trailingContent = {
-                        IconButton(onClick = {
-                            donePresents.remove(present)
-                            context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-
-                        }) {
-                            Icon(Icons.Default.Delete, "Remove")
-                        }
                     })
-                }
+                }, modifier = Modifier.fillMaxSize().combinedClickable(onClick = {}, onLongClick = {
+                    presents.remove(present)
+                    context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
+                }))
             }
-            var textState by remember { mutableStateOf(TextFieldValue()) }
-            var openDialog by remember { mutableStateOf(false) }
-            ExtendedFloatingActionButton(
-                onClick = {
-                    openDialog = true
+            item {
+                ListItem({ Text("Erledigt") })
+            }
+            items(donePresents) { present ->
+                ListItem({
+                    Text(present.name)
+                }, leadingContent = {
+                    var state by remember { mutableStateOf(present.done) }
+                    Checkbox(state, {
+                        state = !state
+                        present.done = state
+                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
+                    })
+                }, trailingContent = {
+                    IconButton(onClick = {
+                        donePresents.remove(present)
+                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
+
+                    }) {
+                        Icon(Icons.Default.Delete, "Remove")
+                    }
+                })
+            }
+        }
+        var textState by remember { mutableStateOf(TextFieldValue()) }
+        var openDialog by remember { mutableStateOf(false) }
+        ExtendedFloatingActionButton(
+            onClick = {
+                openDialog = true
+            },
+            icon = {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "Add"
+                )
+            },
+            text = { Text("Present") },
+            modifier = Modifier.align(Alignment.End),
+
+            )
+        Spacer(Modifier.height(56.dp))
+
+        if (openDialog) {
+            AlertDialog(onDismissRequest = {},
+                title = {
+                    Text("Neue Geschenk-Idee")
                 },
-                icon = {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = "Add"
+                text = {
+                    TextField(
+                        textState,
+                        { textState = it }
                     )
                 },
-                text = { Text("Present") },
-                modifier = Modifier.align(Alignment.End),
-
-                )
-            Spacer(Modifier.height(56.dp))
-
-            if (openDialog) {
-                AlertDialog(onDismissRequest = {},
-                    title = {
-                        Text("Neue Geschenk-Idee")
-                    },
-                    text = {
-                        TextField(
-                            textState,
-                            { textState = it }
-                        )
-                    },
-                    confirmButton = {
-                        Button({
-                            presents.add(Present(textState.text, false))
-                            context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                            openDialog = false
-                        }) {
-                            Text("Hinzufügen")
-                        }
-                    })
-            }
+                confirmButton = {
+                    Button({
+                        presents.add(Present(textState.text, false))
+                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
+                        openDialog = false
+                    }) {
+                        Text("Hinzufügen")
+                    }
+                })
         }
     }
 }
@@ -178,4 +191,17 @@ fun Context.storePresents(
                     .toSet()
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ContactDetailPreview() {
+    ContactDetail(
+        BirthdayContact(
+            20,
+            BirthDate(LocalDate.now(), false),
+            20,
+            "Test Name"
+        )
+    )
 }
