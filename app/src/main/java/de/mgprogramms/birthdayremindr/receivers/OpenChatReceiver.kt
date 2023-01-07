@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.receivers
+package de.mgprogramms.birthdayremindr.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,8 +9,8 @@ import android.provider.SimPhonebookContract.SimRecords.PHONE_NUMBER
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.startActivity
-import de.mgprogramms.birthdayreminder.R
-import de.mgprogramms.birthdayreminder.providers.ContactsProvider
+import de.mgprogramms.birthdayremindr.R
+import de.mgprogramms.birthdayremindr.providers.ContactsProvider
 import java.net.URLEncoder
 
 const val CONTACT_ID = "contactId"

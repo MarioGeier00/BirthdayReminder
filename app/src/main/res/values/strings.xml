@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name" translatable="false">BirthdayReminder</string>
+    <string name="app_name" translatable="false">BirthdayRemindr</string>
     <string name="home_screen">Home</string>
     <string name="contact_list_screen">Contacts</string>
     <string name="settings_screen">Notifications</string>
 
 
-    <string name="settings_birthday_notification_title">BirthdayReminder notifications</string>
-    <string name="settings_birthday_notification_description">BirthdayReminder informs you about upcoming birthdays by readying your contacts date of birth</string>
+    <string name="settings_birthday_notification_title">BirthdayRemindr notifications</string>
+    <string name="settings_birthday_notification_description">BirthdayRemindr informs you about upcoming birthdays by readying your contacts date of birth</string>
     <string name="settings_next_notification">Scheduled notification in %1$s hours %2$s minutes</string>
 
     <string name="settings_test_notification_alarm">Set alarm notification</string>

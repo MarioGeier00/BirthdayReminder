@@ -1,7 +1,7 @@
-package de.mgprogramms.birthdayreminder.providers
+package de.mgprogramms.birthdayremindr.providers
 
 import android.content.Context
-import de.mgprogramms.birthdayreminder.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.models.toBirthdayContact
 
 class BirthdayContactsProvider(context: Context) {
     private val contactsProvider = ContactsProvider(context)

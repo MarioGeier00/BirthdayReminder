@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import org.junit.Test
 

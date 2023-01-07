@@ -1,7 +1,7 @@
-package de.mgprogramms.birthdayreminder.models
+package de.mgprogramms.birthdayremindr.models
 
-import de.mgprogramms.birthdayreminder.providers.BirthDate
-import de.mgprogramms.birthdayreminder.providers.parseDate
+import de.mgprogramms.birthdayremindr.providers.BirthDate
+import de.mgprogramms.birthdayremindr.providers.parseDate
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 

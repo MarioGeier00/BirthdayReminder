@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.providers
+package de.mgprogramms.birthdayremindr.providers
 
 import android.content.Context
 

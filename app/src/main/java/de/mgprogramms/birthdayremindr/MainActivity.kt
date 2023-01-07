@@ -1,9 +1,10 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -20,11 +21,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigate
-import de.mgprogramms.birthdayreminder.destinations.ContactListDestination
-import de.mgprogramms.birthdayreminder.destinations.DirectionDestination
-import de.mgprogramms.birthdayreminder.destinations.HomeDestination
-import de.mgprogramms.birthdayreminder.destinations.SettingsDestination
-import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
+import de.mgprogramms.birthdayremindr.destinations.ContactListDestination
+import de.mgprogramms.birthdayremindr.destinations.DirectionDestination
+import de.mgprogramms.birthdayremindr.destinations.HomeDestination
+import de.mgprogramms.birthdayremindr.destinations.SettingsDestination
+import de.mgprogramms.birthdayremindr.ui.theme.BirthdayRemindrTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -32,10 +33,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            BirthdayReminderTheme {
-                Surface(
-                    color = MaterialTheme.colorScheme.background
-                ) {
+            BirthdayRemindrTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navController = rememberNavController()
                     Scaffold(bottomBar = { MainNavigationBar(navController) }) {
                         DestinationsNavHost(
@@ -85,7 +85,7 @@ fun MainNavigationBar(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
-    BirthdayReminderTheme {
+    BirthdayRemindrTheme {
         val navController = rememberNavController()
         Scaffold(bottomBar = { MainNavigationBar(navController) }) {
             DestinationsNavHost(

@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.Manifest
 import android.content.Context
@@ -26,9 +26,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import de.mgprogramms.birthdayreminder.destinations.ContactDetailDestination
-import de.mgprogramms.birthdayreminder.models.BirthdayContact
-import de.mgprogramms.birthdayreminder.providers.BirthdayContactsProvider
+import de.mgprogramms.birthdayremindr.destinations.ContactDetailDestination
+import de.mgprogramms.birthdayremindr.models.BirthdayContact
+import de.mgprogramms.birthdayremindr.providers.BirthdayContactsProvider
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 

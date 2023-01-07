@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.receivers
+package de.mgprogramms.birthdayremindr.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context

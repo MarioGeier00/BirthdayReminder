@@ -1,11 +1,11 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import de.mgprogramms.birthdayreminder.notifications.BirthdayNotificationChannelId
+import de.mgprogramms.birthdayremindr.notifications.BirthdayNotificationChannelId
 
-class BirthdayReminderApp : Application() {
+class BirthdayRemindrApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

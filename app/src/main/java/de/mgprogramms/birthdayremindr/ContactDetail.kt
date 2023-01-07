@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -26,11 +26,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ramcosta.composedestinations.annotation.Destination
-import de.mgprogramms.birthdayreminder.models.BirthdayContact
-import de.mgprogramms.birthdayreminder.models.Contact
-import de.mgprogramms.birthdayreminder.models.toBirthdayContact
-import de.mgprogramms.birthdayreminder.providers.ContactsProvider
-import de.mgprogramms.birthdayreminder.providers.dataStore
+import de.mgprogramms.birthdayremindr.models.BirthdayContact
+import de.mgprogramms.birthdayremindr.models.Contact
+import de.mgprogramms.birthdayremindr.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.providers.ContactsProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate

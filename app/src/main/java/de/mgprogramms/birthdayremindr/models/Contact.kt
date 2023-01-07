@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.models
+package de.mgprogramms.birthdayremindr.models
 
 import android.database.Cursor
 import android.provider.ContactsContract

@@ -1,10 +1,10 @@
-package de.mgprogramms.birthdayreminder.providers
+package de.mgprogramms.birthdayremindr.providers
 
 import android.content.Context
 import android.provider.ContactsContract
-import de.mgprogramms.birthdayreminder.models.Contact
-import de.mgprogramms.birthdayreminder.models.ContactProjection
-import de.mgprogramms.birthdayreminder.models.parseContact
+import de.mgprogramms.birthdayremindr.models.Contact
+import de.mgprogramms.birthdayremindr.models.ContactProjection
+import de.mgprogramms.birthdayremindr.models.parseContact
 
 class ContactsProvider(val context: Context) {
 

@@ -1,13 +1,13 @@
-package de.mgprogramms.birthdayreminder.receivers
+package de.mgprogramms.birthdayremindr.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import de.mgprogramms.birthdayreminder.models.toBirthdayContact
-import de.mgprogramms.birthdayreminder.notifications.BirthdayNotification
-import de.mgprogramms.birthdayreminder.providers.AlarmProvider
-import de.mgprogramms.birthdayreminder.providers.ContactsProvider
-import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
+import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
+import de.mgprogramms.birthdayremindr.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.providers.AlarmProvider
+import de.mgprogramms.birthdayremindr.providers.ContactsProvider
+import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider
 
 
 const val AlarmReceiverContactIdKey = "contact_id"

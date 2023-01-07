@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
-import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
+import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider
 
 
 @OptIn(ExperimentalPermissionsApi::class)

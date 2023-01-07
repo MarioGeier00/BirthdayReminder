@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.notifications
+package de.mgprogramms.birthdayremindr.notifications
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -7,13 +7,13 @@ import android.content.Intent
 import android.provider.SimPhonebookContract.SimRecords.PHONE_NUMBER
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import de.mgprogramms.birthdayreminder.R
-import de.mgprogramms.birthdayreminder.models.BirthdayContact
-import de.mgprogramms.birthdayreminder.providers.PhoneNumberProvider
-import de.mgprogramms.birthdayreminder.providers.RawContactIdProvider
-import de.mgprogramms.birthdayreminder.receivers.CONTACT_ID
-import de.mgprogramms.birthdayreminder.receivers.OpenChatReceiver
-import de.mgprogramms.birthdayreminder.receivers.RemoveNotificationReceiver
+import de.mgprogramms.birthdayremindr.R
+import de.mgprogramms.birthdayremindr.models.BirthdayContact
+import de.mgprogramms.birthdayremindr.providers.PhoneNumberProvider
+import de.mgprogramms.birthdayremindr.providers.RawContactIdProvider
+import de.mgprogramms.birthdayremindr.receivers.CONTACT_ID
+import de.mgprogramms.birthdayremindr.receivers.OpenChatReceiver
+import de.mgprogramms.birthdayremindr.receivers.RemoveNotificationReceiver
 
 const val BirthdayNotificationChannelId = "birthday_reminder_notification"
 

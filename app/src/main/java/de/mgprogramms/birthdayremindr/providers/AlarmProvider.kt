@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder.providers
+package de.mgprogramms.birthdayremindr.providers
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -9,9 +9,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import de.mgprogramms.birthdayreminder.models.BirthdayContact
-import de.mgprogramms.birthdayreminder.receivers.AlarmReceiver
-import de.mgprogramms.birthdayreminder.receivers.AlarmReceiverContactIdKey
+import de.mgprogramms.birthdayremindr.models.BirthdayContact
+import de.mgprogramms.birthdayremindr.receivers.AlarmReceiver
+import de.mgprogramms.birthdayremindr.receivers.AlarmReceiverContactIdKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.util.*

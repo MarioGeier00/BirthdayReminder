@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayreminder
+package de.mgprogramms.birthdayremindr
 
 import android.Manifest
 import android.content.Intent
@@ -25,12 +25,12 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
-import de.mgprogramms.birthdayreminder.models.toBirthdayContact
-import de.mgprogramms.birthdayreminder.notifications.BirthdayNotification
-import de.mgprogramms.birthdayreminder.providers.AlarmProvider
-import de.mgprogramms.birthdayreminder.providers.ContactsProvider
-import de.mgprogramms.birthdayreminder.providers.NextBirthdayProvider
-import de.mgprogramms.birthdayreminder.ui.theme.BirthdayReminderTheme
+import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
+import de.mgprogramms.birthdayremindr.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.providers.AlarmProvider
+import de.mgprogramms.birthdayremindr.providers.ContactsProvider
+import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider
+import de.mgprogramms.birthdayremindr.ui.theme.BirthdayRemindrTheme
 import java.time.Duration
 import java.time.LocalTime
 
@@ -42,7 +42,7 @@ fun Settings() {
     val context = LocalContext.current
 
     val notificationPermissionState =
-        if (Build.VERSION.SDK_INT >= 33) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             rememberPermissionState(
                 Manifest.permission.POST_NOTIFICATIONS
             )
@@ -158,7 +158,7 @@ fun SettingsSwitch(state: Boolean, stateChange: (Boolean) -> Unit, title: String
 @Preview
 @Composable
 fun SettingsPreview() {
-    BirthdayReminderTheme {
+    BirthdayRemindrTheme {
         Surface {
             Settings()
         }
