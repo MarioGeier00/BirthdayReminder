@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayremindr
+package de.mgprogramms.birthdayremindr.ui
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayremindr.R
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.providers.BirthDate
 import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider

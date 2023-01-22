@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayremindr
+package de.mgprogramms.birthdayremindr.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

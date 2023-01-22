@@ -45,7 +45,7 @@
 
 
         <activity
-            android:name=".NotificationHistoryActivity"
+            android:name=".ui.NotificationHistoryActivity"
             android:label="@string/title_notification_history"
             android:theme="@style/Theme.BirthdayRemindr" />
 
