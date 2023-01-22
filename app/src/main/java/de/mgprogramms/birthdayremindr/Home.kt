@@ -14,12 +14,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayremindr.models.BirthdayContact
+import de.mgprogramms.birthdayremindr.providers.BirthDate
 import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -32,10 +36,17 @@ fun Home() {
     )
     LifecyclePermissionRequest(permissionsState)
 
+    NextBirthday(permissionsState.allPermissionsGranted) {
+        NextBirthdayProvider(context).getNextBirthdays().firstOrNull()
+    }
+}
+
+@Composable
+fun NextBirthday(allPermissionsGranted: Boolean, nextBirthdayProvider: () -> BirthdayContact?) {
     Column(Modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        if (permissionsState.allPermissionsGranted) {
+        if (allPermissionsGranted) {
             val nextBirthday = remember {
-                NextBirthdayProvider(context).getNextBirthdays().firstOrNull()
+                nextBirthdayProvider()
             }
             if (nextBirthday == null) {
                 Text(
@@ -43,7 +54,7 @@ fun Home() {
                     textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize()
                 )
             } else {
-                NextBirthday(nextBirthday.daysUntilBirthday, nextBirthday.name)
+                NextBirthdayText(nextBirthday.daysUntilBirthday, nextBirthday.name)
             }
         } else {
             Text(
@@ -52,11 +63,10 @@ fun Home() {
             )
         }
     }
-
 }
 
 @Composable
-fun NextBirthday(daysUntilNextBirthday: Long, nextBirthdayName: String) {
+fun NextBirthdayText(daysUntilNextBirthday: Long, nextBirthdayName: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,5 +85,13 @@ fun NextBirthday(daysUntilNextBirthday: Long, nextBirthdayName: String) {
             textAlign = TextAlign.Center,
             lineHeight = 32.sp
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomePreview() {
+    NextBirthday(true) {
+        BirthdayContact(1, BirthDate(LocalDate.now(), false), 2, "Max Mustermann")
     }
 }
