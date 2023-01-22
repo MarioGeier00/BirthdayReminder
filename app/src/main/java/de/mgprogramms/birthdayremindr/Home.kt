@@ -88,10 +88,19 @@ fun NextBirthdayText(daysUntilNextBirthday: Long, nextBirthdayName: String) {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
     NextBirthday(true) {
+        BirthdayContact(1, BirthDate(LocalDate.now(), false), 2, "Max Mustermann")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomePreviewNoPermissions() {
+    NextBirthday(false) {
         BirthdayContact(1, BirthDate(LocalDate.now(), false), 2, "Max Mustermann")
     }
 }
