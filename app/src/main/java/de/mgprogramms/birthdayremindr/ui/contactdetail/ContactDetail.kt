@@ -1,4 +1,4 @@
-package de.mgprogramms.birthdayremindr.ui
+package de.mgprogramms.birthdayremindr.ui.contactdetail
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -159,24 +159,7 @@ fun ContactDetail(
     }
 }
 
-@Composable
-fun BirthdayDetailInfo(contact: BirthdayContact) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(painterResource(R.drawable.ic_cake), "Geburtstag")
-            Text("${contact.daysUntilBirthday} Tage")
-        }
 
-        if (!contact.birthDate.noYear) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(painterResource(R.drawable.ic_schedule), "Alter")
-                Spacer(Modifier.size(4.dp))
-                val age = remember { contact.birthDate.parsedDate.until(LocalDate.now()) }
-                Text("${age.years} Jahre alt")
-            }
-        }
-    }
-}
 
 fun Context.storePresents(
     preference: Preferences.Key<Set<String>>,

@@ -22,31 +22,38 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.navigate
-import de.mgprogramms.birthdayremindr.destinations.ContactListDestination
-import de.mgprogramms.birthdayremindr.destinations.DirectionDestination
-import de.mgprogramms.birthdayremindr.destinations.HomeDestination
-import de.mgprogramms.birthdayremindr.destinations.SettingsDestination
+import de.mgprogramms.birthdayremindr.ui.NavGraphs
+import de.mgprogramms.birthdayremindr.ui.appDestination
+import de.mgprogramms.birthdayremindr.ui.destinations.ContactListDestination
+import de.mgprogramms.birthdayremindr.ui.destinations.DirectionDestination
+import de.mgprogramms.birthdayremindr.ui.destinations.HomeDestination
+import de.mgprogramms.birthdayremindr.ui.destinations.SettingsDestination
 import de.mgprogramms.birthdayremindr.ui.theme.BirthdayRemindrTheme
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             BirthdayRemindrTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    val navController = rememberNavController()
-                    Scaffold(bottomBar = { MainNavigationBar(navController) }) {
-                        DestinationsNavHost(
-                            navGraph = NavGraphs.root,
-                            navController = navController,
-                            modifier = Modifier.padding(it),
-                        )
-                    }
-                }
+                BirthdayRemindrScreen()
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BirthdayRemindrScreen() {
+    // A surface container using the 'background' color from the theme
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        val navController = rememberNavController()
+        Scaffold(bottomBar = { MainNavigationBar(navController) }) {
+            DestinationsNavHost(
+                navGraph = NavGraphs.root,
+                navController = navController,
+                modifier = Modifier.padding(it),
+            )
         }
     }
 }

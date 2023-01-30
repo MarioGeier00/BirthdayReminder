@@ -27,9 +27,9 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import de.mgprogramms.birthdayremindr.R
-import de.mgprogramms.birthdayremindr.destinations.ContactDetailDestination
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.providers.BirthdayContactsProvider
+import de.mgprogramms.birthdayremindr.ui.destinations.ContactDetailDestination
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 

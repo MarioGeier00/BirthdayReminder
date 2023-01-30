@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import de.mgprogramms.birthdayremindr.R
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.providers.BirthDate
@@ -28,7 +29,8 @@ import java.time.LocalDate
 
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Destination(start = true)
+@RootNavGraph(start = true) // sets this as the start destination of the default nav graph
+@Destination
 @Composable
 fun Home() {
     val context = LocalContext.current
