@@ -1,5 +1,6 @@
 package de.mgprogramms.birthdayremindr.ui.contactdetail
 
+import Presents
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -20,24 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringSetPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.models.Contact
 import de.mgprogramms.birthdayremindr.models.toBirthdayContact
 import de.mgprogramms.birthdayremindr.providers.ContactsProvider
-import kotlinx.coroutines.flow.first
+import de.mgprogramms.birthdayremindr.providers.presents.PresentsSerializer
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contact_details")
-
-data class Present(
-    val name: String,
-    var done: Boolean,
-)
 
 @Destination
 @Composable
@@ -54,12 +47,19 @@ fun ContactDetail(
     }
 }
 
+val Context.presentsStore: DataStore<Presents> by dataStore(
+    fileName = "presents.pb",
+    serializer = PresentsSerializer,
+)
+
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContactDetail(
     contact: BirthdayContact
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Column(Modifier.fillMaxSize().padding(22.dp, 18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(contact.name, fontSize = 48.sp)
@@ -69,60 +69,57 @@ fun ContactDetail(
 
         Text("Geschenk-Ideen")
 
-        val presentsPreference = remember { stringSetPreferencesKey("presents_${contact.id}") }
-        val presents = remember {
-            runBlocking {
-                context.dataStore.data.first()[presentsPreference] ?: setOf()
-            }.map { Present(it, false) }.toMutableList()
-        }
 
-        val donePresentsPreference = remember { stringSetPreferencesKey("presents_done_${contact.id}") }
-        val donePresents = remember {
-            runBlocking {
-                context.dataStore.data.first()[donePresentsPreference] ?: setOf()
-            }.map { Present(it, true) }.toMutableList()
-        }
+        val allPresents: Presents by context.presentsStore.data.collectAsState(PresentsSerializer.defaultValue)
+        val userPresents = allPresents.usersList.find { it.userId == contact.id } ?: Presents.User.getDefaultInstance()
+
+        val groupedPresents = userPresents.presentsList.groupBy { it.done }
+        val presents = groupedPresents[false]
+        val donePresents = groupedPresents[true]
 
         val scrollState = rememberLazyListState()
 
         LazyColumn(state = scrollState, modifier = Modifier.weight(1F, true)) {
-            items(presents) { present ->
-                ListItem({
-                    Text(present.name)
-                }, leadingContent = {
-                    var state by remember { mutableStateOf(present.done) }
-                    Checkbox(state, {
-                        state = !state
-                        present.done = state
-                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                    })
-                }, modifier = Modifier.fillMaxSize().combinedClickable(onClick = {}, onLongClick = {
-                    presents.remove(present)
-                    context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                }))
+            if (presents != null) {
+                items(presents) { present ->
+                    ListItem({ Text(present.text) }, leadingContent = {
+                        Checkbox(present.done, {
+                            coroutineScope.launch {
+                                updatePresentDoneState(context.presentsStore, contact.id, present, it)
+                            }
+                        })
+                    }, modifier = Modifier.fillMaxSize().combinedClickable(onClick = {}, onLongClick = {
+                        runBlocking {
+                            removePresent(context.presentsStore, contact.id, present)
+                        }
+                    }))
+                }
             }
-            items(donePresents) { present ->
-                ListItem({
-                    Text(present.name)
-                }, leadingContent = {
-                    var state by remember { mutableStateOf(present.done) }
-                    Checkbox(state, {
-                        state = !state
-                        present.done = state
-                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
-                    })
-                }, trailingContent = {
-                    IconButton(onClick = {
-                        donePresents.remove(present)
-                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
 
-                    }) {
-                        Icon(Icons.Default.Delete, "Remove")
-                    }
-                })
+            if (donePresents != null) {
+                items(donePresents) { present ->
+                    ListItem({ Text(present.text) },
+                        leadingContent = {
+                            Checkbox(present.done, {
+                                coroutineScope.launch {
+                                    updatePresentDoneState(context.presentsStore, contact.id, present, it)
+                                }
+                            })
+                        },
+                        trailingContent = {
+                            IconButton(onClick = {
+                                coroutineScope.launch {
+                                    removePresent(context.presentsStore, contact.id, present)
+                                }
+                            }) {
+                                Icon(Icons.Default.Delete, "Remove")
+                            }
+                        })
+                }
             }
+
         }
-        var textState by remember { mutableStateOf(TextFieldValue()) }
+
         var openDialog by remember { mutableStateOf(false) }
         ExtendedFloatingActionButton(
             onClick = { openDialog = true },
@@ -132,6 +129,7 @@ fun ContactDetail(
         )
 
         if (openDialog) {
+            var textState by remember { mutableStateOf(TextFieldValue()) }
             AlertDialog(
                 onDismissRequest = {
                     openDialog = false
@@ -144,10 +142,27 @@ fun ContactDetail(
                 },
                 confirmButton = {
                     Button({
-                        presents.add(Present(textState.text, false))
-                        context.storePresents(presentsPreference, presents, donePresentsPreference, donePresents)
+                        runBlocking {
+                            context.presentsStore.updateData { presents ->
+                                val userIndex = presents.usersList.indexOfFirst { it.userId == contact.id }
+
+                                val presentBuilder = Presents.User.Present.newBuilder()
+                                    .setText(textState.text)
+                                    .setDone(false)
+
+                                if (userIndex >= 0) {
+                                    presents.toBuilder().setUsers(
+                                        userIndex,
+                                        Presents.User.newBuilder().addPresents(presentBuilder)
+                                    ).build()
+                                } else {
+                                    presents.toBuilder().addUsers(
+                                        Presents.User.newBuilder().setUserId(contact.id).addPresents(presentBuilder)
+                                    ).build()
+                                }
+                            }
+                        }
                         openDialog = false
-                        textState = TextFieldValue()
                     }) {
                         Text("Hinzufügen")
                     }
@@ -157,29 +172,33 @@ fun ContactDetail(
 }
 
 
-
-fun Context.storePresents(
-    preference: Preferences.Key<Set<String>>,
-    presents: List<Present>,
-    donePresentsPreference: Preferences.Key<Set<String>>,
-    donePresents: MutableList<Present>,
+suspend fun updatePresentDoneState(
+    dataStore: DataStore<Presents>,
+    userId: Int,
+    present: Presents.User.Present,
+    done: Boolean
 ) {
-    runBlocking {
-        val combinedPresents = presents.plus(donePresents)
-        dataStore.edit { store ->
-            store[preference] =
-                combinedPresents
-                    .filter { !it.done }
-                    .map { it.name }
-                    .toSet()
-            store[donePresentsPreference] =
-                combinedPresents
-                    .filter { it.done }
-                    .map { it.name }
-                    .toSet()
-        }
+    dataStore.updateData { presents ->
+        val index = presents.usersList[userId].presentsList.indexOf(present)
+        presents.toBuilder()
+            .setUsers(
+                userId,
+                presents.usersList[userId].toBuilder().setPresents(index, present.toBuilder().setDone(done))
+            ).build()
     }
 }
+
+suspend fun removePresent(dataStore: DataStore<Presents>, userId: Int, present: Presents.User.Present) {
+    dataStore.updateData { presents ->
+        val index = presents.usersList[userId].presentsList.indexOf(present)
+        presents.toBuilder()
+            .setUsers(
+                userId,
+                presents.usersList[userId].toBuilder().removePresents(index)
+            ).build()
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
