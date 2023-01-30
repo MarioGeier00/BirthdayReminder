@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,14 +25,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.ramcosta.composedestinations.annotation.Destination
-import de.mgprogramms.birthdayremindr.R
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.models.Contact
 import de.mgprogramms.birthdayremindr.models.toBirthdayContact
 import de.mgprogramms.birthdayremindr.providers.ContactsProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import java.time.LocalDate
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "contact_details")
 

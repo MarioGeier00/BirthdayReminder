@@ -3,8 +3,8 @@ package de.mgprogramms.birthdayremindr.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
 import de.mgprogramms.birthdayremindr.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
 import de.mgprogramms.birthdayremindr.providers.AlarmProvider
 import de.mgprogramms.birthdayremindr.providers.ContactsProvider
 import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider

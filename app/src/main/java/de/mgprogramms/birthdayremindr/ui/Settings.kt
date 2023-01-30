@@ -26,8 +26,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.ramcosta.composedestinations.annotation.Destination
 import de.mgprogramms.birthdayremindr.R
-import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
 import de.mgprogramms.birthdayremindr.models.toBirthdayContact
+import de.mgprogramms.birthdayremindr.notifications.BirthdayNotification
 import de.mgprogramms.birthdayremindr.providers.AlarmProvider
 import de.mgprogramms.birthdayremindr.providers.ContactsProvider
 import de.mgprogramms.birthdayremindr.providers.NextBirthdayProvider
