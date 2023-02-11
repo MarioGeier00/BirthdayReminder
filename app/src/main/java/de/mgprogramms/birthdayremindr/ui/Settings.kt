@@ -1,7 +1,6 @@
 package de.mgprogramms.birthdayremindr.ui
 
 import android.Manifest
-import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -53,7 +52,7 @@ fun Settings() {
 
     val alarmProvider = remember { AlarmProvider(context) }
     var hasAnyAlarms by remember { mutableStateOf(alarmProvider.hasAnyAlarms()) }
-    val showNotificationState by remember{
+    val showNotificationState by remember {
         derivedStateOf {
             hasAnyAlarms && notificationPermissionState?.status?.isGranted != false
         }
@@ -114,22 +113,25 @@ fun Settings() {
         }
 
         Spacer(Modifier.height(18.dp))
-        Text(stringResource(R.string.settings_test_notification_alarm), Modifier.clickable {
-            AlarmProvider(context).setAlarmForBirthday(
-                ContactsProvider(context).getContacts().first().toBirthdayContact()
-            )
-        }.padding(22.dp, 16.dp).fillMaxWidth())
-        Text(stringResource(R.string.settings_test_notification_direct), Modifier.clickable {
-            val notification = BirthdayNotification(
-                context,
-                ContactsProvider(context).getContacts().find { it.name == "Mama" }!!.toBirthdayContact()
-            )
-            notification.show(context, notification.create(), notification.birthdayData.id)
-        }.padding(22.dp, 16.dp).fillMaxWidth())
 
-        Text(stringResource(R.string.notification_history), Modifier.clickable {
-            context.startActivity(Intent(context, NotificationHistoryActivity::class.java))
-        }.padding(22.dp, 16.dp).fillMaxWidth())
+        if (notificationPermissionState?.status?.isGranted == true) {
+            val testContact = remember {
+                ContactsProvider(context).getContacts()
+                    .find { !it.toBirthdayContact().birthDate.noYear }
+                    ?.toBirthdayContact()
+            }
+
+            if (testContact != null) {
+                Text(stringResource(R.string.settings_test_notification_direct), Modifier.clickable {
+                    val notification = BirthdayNotification(context, testContact)
+                    notification.show(context, notification.create(), notification.birthdayData.id)
+                }.padding(22.dp, 16.dp).fillMaxWidth())
+            }
+        }
+
+//        Text(stringResource(R.string.notification_history), Modifier.clickable {
+//            context.startActivity(Intent(context, NotificationHistoryActivity::class.java))
+//        }.padding(22.dp, 16.dp).fillMaxWidth())
     }
 }
 
