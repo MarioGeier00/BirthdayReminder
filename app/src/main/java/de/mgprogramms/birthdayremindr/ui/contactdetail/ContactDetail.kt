@@ -71,17 +71,21 @@ fun ContactDetail(
 
 
         val allPresents: Presents by context.presentsStore.data.collectAsState(PresentsSerializer.defaultValue)
-        val userPresents = allPresents.usersList.find { it.userId == contact.id } ?: Presents.User.getDefaultInstance()
+        val userPresents by remember {
+            derivedStateOf {
+                allPresents.usersList.find { it.userId == contact.id } ?: Presents.User.getDefaultInstance()
+            }
+        }
 
-        val groupedPresents = userPresents.presentsList.groupBy { it.done }
-        val presents = groupedPresents[false]
-        val donePresents = groupedPresents[true]
+        val groupedPresents by remember { derivedStateOf { userPresents.presentsList.groupBy { it.done } } }
+        val presents by remember { derivedStateOf { groupedPresents[false] } }
+        val donePresents by remember { derivedStateOf { groupedPresents[true] } }
 
         val scrollState = rememberLazyListState()
 
         LazyColumn(state = scrollState, modifier = Modifier.weight(1F, true)) {
-            if (presents != null) {
-                items(presents) { present ->
+            if (presents !== null) {
+                items(presents!!) { present ->
                     ListItem({ Text(present.text) }, leadingContent = {
                         Checkbox(present.done, {
                             coroutineScope.launch {
@@ -89,7 +93,7 @@ fun ContactDetail(
                             }
                         })
                     }, modifier = Modifier.fillMaxSize().combinedClickable(onClick = {}, onLongClick = {
-                        runBlocking {
+                        coroutineScope.launch {
                             removePresent(context.presentsStore, contact.id, present)
                         }
                     }))
@@ -97,8 +101,9 @@ fun ContactDetail(
             }
 
             if (donePresents != null) {
-                items(donePresents) { present ->
-                    ListItem({ Text(present.text) },
+                items(donePresents!!) { present ->
+                    ListItem(
+                        { Text(present.text) },
                         leadingContent = {
                             Checkbox(present.done, {
                                 coroutineScope.launch {
@@ -153,7 +158,7 @@ fun ContactDetail(
                                 if (userIndex >= 0) {
                                     presents.toBuilder().setUsers(
                                         userIndex,
-                                        Presents.User.newBuilder().addPresents(presentBuilder)
+                                        presents.usersList[userIndex].toBuilder().addPresents(presentBuilder)
                                     ).build()
                                 } else {
                                     presents.toBuilder().addUsers(
@@ -171,6 +176,17 @@ fun ContactDetail(
     }
 }
 
+fun Presents.findUserAndPresent(
+    userId: Int,
+    presentText: String
+): Pair<Presents.User, Int>? {
+    val user = usersList.find { it.userId == userId }
+    val presentIndex = user?.presentsList?.indexOfFirst { it.text == presentText }
+    if (user != null && presentIndex != null) {
+        return user to presentIndex
+    }
+    return null
+}
 
 suspend fun updatePresentDoneState(
     dataStore: DataStore<Presents>,
@@ -179,23 +195,27 @@ suspend fun updatePresentDoneState(
     done: Boolean
 ) {
     dataStore.updateData { presents ->
-        val index = presents.usersList[userId].presentsList.indexOf(present)
-        presents.toBuilder()
-            .setUsers(
-                userId,
-                presents.usersList[userId].toBuilder().setPresents(index, present.toBuilder().setDone(done))
-            ).build()
+        presents.findUserAndPresent(userId, present.text)?.let {
+            val (user, presentIndex) = it
+            presents.toBuilder()
+                .setUsers(
+                    presents.usersList.indexOf(user),
+                    user.toBuilder().setPresents(presentIndex, present.toBuilder().setDone(done))
+                ).build()
+        } ?: presents
     }
 }
 
 suspend fun removePresent(dataStore: DataStore<Presents>, userId: Int, present: Presents.User.Present) {
     dataStore.updateData { presents ->
-        val index = presents.usersList[userId].presentsList.indexOf(present)
-        presents.toBuilder()
-            .setUsers(
-                userId,
-                presents.usersList[userId].toBuilder().removePresents(index)
-            ).build()
+        presents.findUserAndPresent(userId, present.text)?.let {
+            val (user, presentIndex) = it
+            presents.toBuilder()
+                .setUsers(
+                    presents.usersList.indexOf(user),
+                    user.toBuilder().removePresents(presentIndex)
+                ).build()
+        } ?: presents
     }
 }
 
