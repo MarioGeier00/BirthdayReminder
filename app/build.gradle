@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     // support for compose destinations' generated code
     id 'com.google.devtools.ksp' version '1.7.20-1.0.6'
+    id "com.google.protobuf" version "0.8.17"
 }
 
 android {
@@ -69,8 +70,9 @@ dependencies {
 
     annotationProcessor "androidx.compose.runtime:runtime-livedata:$compose_version"
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.datastore:datastore:1.0.0")
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "com.google.protobuf:protobuf-javalite:3.18.0"
 
     def work_version = '2.7.1'
 
@@ -93,4 +95,25 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+}
+
+protobuf {
+    // Configures the Protobuf compilation and the protoc executable
+    protoc {
+        // Downloads from the repositories
+        artifact = "com.google.protobuf:protoc:3.14.0"
+    }
+
+    // Generates the java Protobuf-lite code for the Protobufs in this project
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                // Configures the task output type
+                java {
+                    // Java Lite has smaller code size and is recommended for Android
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
