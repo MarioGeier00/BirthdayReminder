@@ -16,12 +16,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
+import de.mgprogramms.birthdayremindr.R
 import de.mgprogramms.birthdayremindr.models.BirthdayContact
 import de.mgprogramms.birthdayremindr.models.Contact
 import de.mgprogramms.birthdayremindr.models.toBirthdayContact
@@ -61,7 +63,7 @@ fun ContactDetail(
     val coroutineScope = rememberCoroutineScope()
 
     Column(Modifier.fillMaxSize().padding(22.dp, 18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(contact.name, fontSize = 48.sp)
+        Text(contact.name, fontSize = 48.sp, lineHeight = 48.sp)
         Spacer(Modifier.height(14.dp))
 
         BirthdayDetailInfo(contact)
@@ -128,7 +130,7 @@ fun ContactDetail(
         ExtendedFloatingActionButton(
             onClick = { openDialog = true },
             icon = { Icon(Icons.Filled.Add, contentDescription = "Add") },
-            text = { Text("Present") },
+            text = { Text(stringResource(R.string.present)) },
             modifier = Modifier.align(Alignment.End),
         )
 
@@ -211,7 +213,7 @@ suspend fun removePresent(dataStore: DataStore<Presents>, userId: Int, present: 
 @Composable
 fun ContactDetailPreview() {
     ContactDetail(
-        Contact(11111, "1992-05-19", "Peter Test")
+        Contact(11111, "1992-05-19", "Peter Mittelname Test")
             .toBirthdayContact()
     )
 }
