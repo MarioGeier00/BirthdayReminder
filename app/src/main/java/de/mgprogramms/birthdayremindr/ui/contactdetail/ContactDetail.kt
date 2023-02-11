@@ -15,6 +15,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -135,6 +137,7 @@ fun ContactDetail(
 
         if (openDialog) {
             var textState by remember { mutableStateOf(TextFieldValue()) }
+            val focusRequester = remember { FocusRequester() }
             AlertDialog(
                 onDismissRequest = {
                     openDialog = false
@@ -143,7 +146,7 @@ fun ContactDetail(
                     Text("Neue Geschenk-Idee")
                 },
                 text = {
-                    TextField(textState, { textState = it })
+                    TextField(textState, { textState = it }, Modifier.focusRequester(focusRequester))
                 },
                 confirmButton = {
                     Button({
@@ -172,6 +175,9 @@ fun ContactDetail(
                         Text("Hinzufügen")
                     }
                 })
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
         }
     }
 }
