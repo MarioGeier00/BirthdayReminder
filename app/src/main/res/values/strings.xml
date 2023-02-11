@@ -33,4 +33,6 @@
     <string name="birthday_notification_title">Birthday</string>
     <string name="birthday_notification_message">%1$s has birthday today</string>
     <string name="no_permission_notification">No permission for notifications granted</string>
+    <string name="new_present">New present</string>
+    <string name="add">add</string>
 </resources>

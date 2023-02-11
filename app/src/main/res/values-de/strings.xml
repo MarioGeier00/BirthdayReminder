@@ -33,4 +33,7 @@
     <string name="birthday_notification_title">Geburtstag</string>
     <string name="birthday_notification_message">%1$s hat heute Geburtstag</string>
     <string name="no_permission_notification">Berechtigung für Benachrichtigungen wurde abgelehnt</string>
+
+    <string name="new_present">Neue Geschenk-Idee</string>
+    <string name="add">Hinzufügen</string>
 </resources>
