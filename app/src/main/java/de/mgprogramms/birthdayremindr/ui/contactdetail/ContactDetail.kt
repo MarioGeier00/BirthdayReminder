@@ -53,7 +53,7 @@ val Context.presentsStore: DataStore<Presents> by dataStore(
 )
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactDetail(
     contact: BirthdayContact

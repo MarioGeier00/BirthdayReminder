@@ -42,7 +42,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BirthdayRemindrScreen() {
     // A surface container using the 'background' color from the theme
@@ -101,7 +100,6 @@ fun MainNavigationBar(navController: NavController) {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
